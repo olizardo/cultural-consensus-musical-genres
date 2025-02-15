@@ -1,0 +1,52 @@
+---
+title: "Jilbert's Distinction Centrality"
+author: "Omar Lizardo"
+date: "`r Sys.Date()`"
+execute: 
+  eval: true
+  echo: true
+  output: true
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+   library(conflicted)
+   library(haven)
+   library(here)
+   library(dplyr)
+```
+```{r import data and select genre stereotype variables}
+   #importing data
+   dat <- read_dta("C:/Users/Omar Lizardo/Google Drive/MISC DATA SOURCES/SSI-2012/SSI2012.dta")
+   #replacing ids with character names
+   dat <- bind_cols(tibble(id_char = paste("id", sapply(dat[, 1], as.character), sep = "_")), dat) %>% 
+   select(id_char, classicalfemale:hvymtluc, -ends_with("none")) %>%  #selecting relevant columns
+   na.omit() #removing missing values
+   head(dat)
+```
+
+```{r creating match matrix}
+   n <- nrow(dat)
+   match <- matrix(0, n, n)
+   for (i in 1:n) {
+      for (j in 1:n) {
+         if (i < j) {
+            match[i, j] <- 300 - (sum(abs(dat[i, 2:301] - dat[j, 2:301])))
+            print(i)
+            print(j)
+         }
+      }
+   }
+```
+
+```{r}
+   match.f <- match
+   match.f[lower.tri(match.f)] <- t(match)[lower.tri(match)]
+   match.s <- (2*(match.f/300) - 1)
+   save(match.f, match.s, file = "match.rda")
+```
+
+
+
+

@@ -1,0 +1,46 @@
+---
+title: "CA of Music Genre Stereotypes"
+author: "Omar Lizardo"
+date: "`r Sys.Date()`"
+execute: 
+  eval: true
+  echo: true
+  output: true
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+   library(conflicted)
+   library(haven)
+   library(here)
+   library(dplyr)
+```
+
+```{r import data and select genre stereotype variables}
+   #importing data
+   dat <- read_dta("C:/Users/Omar Lizardo/Google Drive/MISC DATA SOURCES/SSI-2012/SSI2012.dta")
+   #replacing ids with character names
+   dat <- bind_cols(tibble(id_char = paste("id", sapply(dat[, 1], as.character), sep = "_")), dat) %>% 
+   select(id_char, classicalfemale:hvymtluc, -ends_with("none")) %>%  #selecting relevant columns
+   na.omit() #removing missing values
+   head(dat)
+```
+
+```{r}
+   make.mat <- function(x) {
+      matrix(as.numeric(x), 20, 15, byrow = TRUE)
+   }
+   r.proj <- function(x) {
+      x %*% t(x)
+   }
+   c.proj <- function(x) {
+      t(x) %*% x
+   }
+   ind.list <- split(dat[, 2:301], seq(nrow(dat)))
+   ind.mat <- lapply(ind.list, make.mat)
+   ind.row <- lapply(ind.mat, r.proj)
+   ind.col <- lapply(ind.mat, c.proj)
+```
+
+
