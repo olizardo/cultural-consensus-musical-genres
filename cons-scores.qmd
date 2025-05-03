@@ -1,0 +1,26 @@
+---
+title: "Estimating Consensus Scores from Match Matrix"
+author: "Omar Lizardo"
+date: "`r Sys.Date()`"
+execute: 
+  eval: true
+  echo: true
+  output: true
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+   library(conflicted)
+   library(here)
+   library(psych)
+```
+
+```{r}
+   load(file = "match.rda")
+   fa.res <- fa(match.c, nfactors = 5)
+   dat.l <- as.data.frame(unclass(fa$loadings))
+```
+
+
+

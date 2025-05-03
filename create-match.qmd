@@ -1,5 +1,5 @@
 ---
-title: "Jilbert's Distinction Centrality"
+title: "Creating Genre Stereotype Match Matrix"
 author: "Omar Lizardo"
 date: "`r Sys.Date()`"
 execute: 
@@ -16,6 +16,7 @@ execute:
    library(here)
    library(dplyr)
 ```
+
 ```{r import data and select genre stereotype variables}
    #importing data
    dat <- read_dta("C:/Users/Omar Lizardo/Google Drive/MISC DATA SOURCES/SSI-2012/SSI2012.dta")
@@ -44,7 +45,9 @@ execute:
    match.f <- match
    match.f[lower.tri(match.f)] <- t(match)[lower.tri(match)]
    match.s <- (2*(match.f/300) - 1)
+   match.c <- cor(match.s)
    save(match.f, match.s, file = "match.rda")
+   save(match.f, match.s, match.c, file = "match.rda")
 ```
 
 
