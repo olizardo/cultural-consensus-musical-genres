@@ -34,15 +34,94 @@ Lizardo, O. and Skiles, S., 2016. Cultural objects as prisms: Perceived audience
   - row-scores are **person-specific** judgments of the relative similarity of genres and labels
   - column-scores represent the **aggregate judgment** of the relative similarity of genres (with respect to labels) and labels (with respect to genres)
   - Supplementary scores for genres and labels represent the **centroid** of the cloud of person-specific judgments
+  
+## Mondo Breiger Approach
 
-## Correspondence Plot of Genre Column Scores
-![First and Second Dimensions](Plots/ca-genre-col12.png)
+- Each individual provides a "personal" two mode network of genres by social labels with corresponding affiliation matrix $\mathbf{A}(p)$
+  - $a^{(p)}_{gl} = 1$ if individual $p$ associates genre $g$ with label $l$
+- The personal genre projection is given by:
+  - $\mathbf{G}(p) = \mathbf{A}(p)\mathbf{A}(p)^T$
+  - $g^{(p)}_{ij}$ records the $p^{th}$ individual's perceived similarity between genres $i$ and $j$ based on their shared labels
+  - $g^{(p)}_{ii}$ records the number of times individual $p$ associates genre $i$ with a label
+  
+## Mondo Breiger Approach
 
-## Correspondence Plot of Genre Column Scores
-![First and Third Dimensions](Plots/ca-genre-col13.png)
+- Each individual provides a "personal" two mode network of genres by social labels with corresponding affiliation matrix $\mathbf{A}(p)$
+  - $a^{(p)}_{gl} = 1$ if individual $p$ associates genre $g$ with label $l$
+- The personal label projection is given by:
+  - $\mathbf{L}(p) = \mathbf{A}(p)^T\mathbf{A}(p)$
+  - $l^{(p)}_{kl}$ records the $p^{th}$ individual's perceived similarity between labels $k$ and $l$ based on their shared genres
+  - $l^{(p)}_{kk}$ records the number of times individual $p$ associates genre $i$ with a label
+  
+## Individual Matrix Examples (Two Mode)
+:::: {.columns}
+::: {.column width="50%"}
+![id_65](Plots/data-ex1.png)
+:::
+::: {.column width="50%"}
+![id_236](Plots/data-ex2.png)
+:::
+::::
 
-## Correspondence Plot of Genre Column Scores
-![First and Fourth Dimensions](Plots/ca-genre-col14.png)
+## Individual Matrix Examples (Two Mode)
+:::: {.columns}
+::: {.column width="50%"}
+![id_1114](Plots/data-ex3.png)
+:::
+::: {.column width="50%"}
+![id_2002](Plots/data-ex4.png)
+:::
+::::
+
+## Example Row Projection
+:::: {.columns}
+::: {.column width="50%"}
+![id_65](Plots/data-ex1.png)
+:::
+::: {.column width="50%"}
+![id_65](Plots/data-ex1-rp.png)
+:::
+::::
+
+##  Example Column Projection
+:::: {.columns}
+::: {.column width="50%"}
+![id_65](Plots/data-ex1.png)
+:::
+::: {.column width="50%"}
+![id_65](Plots/data-ex1-cp.png)
+:::
+::::
+
+##  Example Row Projection
+:::: {.columns}
+::: {.column width="50%"}
+![id_236](Plots/data-ex2.png)
+:::
+::: {.column width="50%"}
+![id_236](Plots/data-ex2-rp.png)
+:::
+::::
+
+##  Example Column Projection
+:::: {.columns}
+::: {.column width="50%"}
+![id_65](Plots/data-ex2.png)
+:::
+::: {.column width="50%"}
+![id_65](Plots/data-ex2-cp.png)
+:::
+::::
+
+##  Stacked Matrices Examples
+:::: {.columns}
+::: {.column width="50%"}
+![id_65 and id_236 (Rows)](Plots/data-ex-stack1.png)
+:::
+::: {.column width="50%"}
+![id_65 and id_236 (Columns)](Plots/data-ex-stack2.png)
+:::
+::::
 
 ## Correspondence Plot of Label Column Scores
 ![First and Second Dimensions](Plots/ca-label-col12.png)
@@ -50,51 +129,29 @@ Lizardo, O. and Skiles, S., 2016. Cultural objects as prisms: Perceived audience
 ## Correspondence Plot of Label Column Scores
 ![First and Third Dimensions](Plots/ca-label-col13.png)
 
-## Correspondence Plot of Label Column Scores
-![First and Fourth Dimensions](Plots/ca-label-col14.png)
+## Correspondence Plot of Genre Column Scores
+![First and Second Dimensions](Plots/ca-genre-col12.png)
 
 ## Correspondence Plot of Genre Column Scores
-![First and Second Dimensions](Plots/genre-sim-dens12.png)
-
-## Correspondence Plot of Label Column Scores
-![First and Second Dimensions](Plots/label-sim-dens12.png)
+![First and Third Dimensions](Plots/ca-genre-col13.png)
 
 ## Correspondence Plot of Genre Clouds
-![First and Second Dimensions](Plots/genre-proto12.png)
+![First and Second Dimensions](Plots/genre-proto-ex1.png)
 
 ## Correspondence Plot of Genre Clouds
-![First and Third Dimensions](Plots/genre-proto13.png)
+![First and Second Dimensions](Plots/genre-proto-ex2.png)
 
 ## Correspondence Plot of Genre Clouds
-![First and Fourth Dimensions](Plots/genre-proto14.png)
+![First and Second Dimensions](Plots/genre-proto-ex3.png)
 
 ## Correspondence Plot of Label Clouds
-![First and Second Dimensions](Plots/label-proto12-1.png)
+![First and Second Dimensions](Plots/label-proto-ex1.png)
 
 ## Correspondence Plot of Label Clouds
-![First and Second Dimensions](Plots/label-proto12-2.png)
+![First and Second Dimensions](Plots/label-proto-ex2.png)
 
 ## Correspondence Plot of Label Clouds
-![First and Third Dimensions](Plots/label-proto13.png)
+![First and Second Dimensions](Plots/label-proto-ex3.png)
 
 ## Correspondence Plot of Label Clouds
-![First and Fourth Dimensions](Plots/label-proto14.png)
-
-## Genre Ridge Plot
-![First Dimension](Plots/genre-ridge-dim1.png)
-
-## Genre Ridge Plot
-![Second Dimension](Plots/genre-ridge-dim2.png)
-
-## Genre Ridge Plot
-![Third Dimension](Plots/genre-ridge-dim3.png)
-
-## Label Ridge Plot
-![First Dimension](Plots/label-ridge-dim1.png)
-
-## Label Ridge Plot
-![Second Dimension](Plots/label-ridge-dim2.png)
-
-## Label Ridge Plot
-![Third Dimension](Plots/label-ridge-dim3.png)
-
+![First and Second Dimensions](Plots/label-proto-ex4.png)

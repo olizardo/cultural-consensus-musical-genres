@@ -1,0 +1,251 @@
+---
+title: "CA of Music Genre Stereotypes"
+author: "Omar Lizardo"
+date: "`r Sys.Date()`"
+execute: 
+  eval: true
+  echo: true
+  output: true
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+   library(conflicted)
+   library(dplyr)
+   library(FactoMineR)
+   library(ggplot2)
+   library(ggrepel)
+   library(corrplot)
+   library(ggridges)
+   library(haven)
+   library(here)
+   library(paletteer)
+   cols <- paletteer_dynamic("cartography::multi.pal", 20)
+   conflicts_prefer(dplyr::filter)
+   conflicts_prefer(dplyr::select)
+```
+
+```{r import data and select genre stereotype variables}
+   #importing data
+   dat <- read_dta("C:/Users/Omar Lizardo/Google Drive/MISC DATA SOURCES/SSI-2012/SSI2012.dta")
+   #replacing ids with character names
+   dat <- bind_cols(tibble(id_char = paste("id", sapply(dat[, 1], as.character), sep = "_")), dat) %>% 
+   select(id_char, classicalfemale:hvymtluc, -ends_with("none")) %>%  #selecting relevant columns
+   na.omit() #removing missing values
+   head(dat)
+```
+
+```{r Creating individual matrices}
+   row.breiger <- function(x) {
+      x %*% t(x)
+      }
+   col.breiger <- function(x) {
+      t(x) %*% x
+      }
+   den <- rowSums(dat[,2:301])/300
+   bad.den <- which(den > .95 | den < 0.05)
+   dat2 <- dat[-c(bad.den), 2:301]
+   ind.list <- split(dat2, seq(nrow(dat2))) # splitting each row of data frame into list objects
+   ind.mat <- lapply(ind.list, function(x) {matrix(as.numeric(x), 20, 15, byrow = TRUE)}) # creating individual two mode network of genre by labels
+      r <- c("Classical", "Opera", "Jazz", "Broadway", "Easy", "Big_Band", "Classic_Rock", "Country", "Bluegrass", "Folk", "Gospel", "Latin", "Rap", "Blues", "Reggae", "Pop", "Contemp_Rock", "Alt_Rock", "Dance", "Metal")
+       c <- c("Female", "Male", "White", "Black", "Hispanic", "Asian", "College", "No_College", "Young", "Mid_Age", "Old", "Lower_Class", "Working_Class", "Middle_Class", "Upper_Class")
+   ind.mat <- lapply(ind.mat, function(x) {rownames(x) <- r; x}) # naming individual rows
+   ind.mat <- lapply(ind.mat, function(x) {colnames(x) <- c; x}) # naming individual columns
+   names(ind.mat) <- dat$id_char[-c(bad.den)]
+   ind.row <- lapply(ind.mat, row.breiger) # individual genre projection
+   ind.col <- lapply(ind.mat, col.breiger) # individual label projection
+   row.stack <- matrix(unlist(ind.row), ncol = 20, byrow = TRUE) # genre stacked matrix
+   col.stack <- matrix(unlist(ind.col), ncol = 15, byrow = TRUE) # label stacked matrix
+   colnames(row.stack) <- r # naming genre stacked matrix columns
+   colnames(col.stack) <- c # naming label stacked matrix columns
+   rownames(row.stack) <- rep(r, nrow(dat2)) # naming genre stacked matrix rows
+   rownames(col.stack) <- rep(c, nrow(dat2)) # naming label stacked matrix rows
+   zero.rows.r <- which(rowSums(row.stack) == 0) # which genre stacked matrix rows sum to zero?
+   zero.rows.c <- which(rowSums(col.stack) == 0) # which label stacked matrix rows sum to zero?
+   names(ind.row) <- dat$id_char[-c(bad.den)]
+   names(ind.col) <- dat$id_char[-c(bad.den)]
+```
+
+```{r Data Examples (Two Mode)}
+   png(file = here("Plots", "data-ex1.png"), width=700, height=700)
+      corrplot(ind.mat[["id_65"]], is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n",
+         number.cex = 1.75, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("white","white","red"))(200))
+   dev.off()
+   png(file = here("Plots", "data-ex2.png"), width=700, height=700)
+      corrplot(ind.mat[["id_236"]], is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n",
+         number.cex = 1.75, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("white","white","red"))(200))
+   dev.off()
+   png(file = here("Plots", "data-ex3.png"), width=700, height=700)
+      corrplot(ind.mat[["id_1114"]], is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n",
+         number.cex = 1.75, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("white","white","red"))(200))
+   dev.off()
+   png(file = here("Plots", "data-ex4.png"), width=700, height=700)
+      corrplot(ind.mat[["id_2002"]], is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n",
+         number.cex = 1.75, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("white","white","red"))(200))
+   dev.off()
+```
+
+```{r Data Examples (Projections)}
+   png(file = here("Plots", "data-ex1-rp.png"), width=700, height=700)
+      m <- max(ind.row[["id_65"]])
+     corrplot(ind.row[["id_65"]], is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n", cl.lim = c(0, m),
+         number.cex = 1.5, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("lightblue","pink","red"))(200))
+   dev.off()
+   png(file = here("Plots", "data-ex1-cp.png"), width=700, height=700)
+      m <- max(ind.col[["id_65"]])
+     corrplot(ind.col[["id_65"]], is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n", cl.lim = c(0, m),
+         number.cex = 1.5, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("lightblue","pink","red"))(200))
+   dev.off()
+   png(file = here("Plots", "data-ex2-rp.png"), width=700, height=700)
+      m <- max(ind.row[["id_236"]])
+     corrplot(ind.row[["id_236"]], is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n", cl.lim = c(0, m),
+         number.cex = 1.5, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("lightblue","pink","red"))(200))
+   dev.off()
+   png(file = here("Plots", "data-ex2-cp.png"), width=700, height=700)
+      m <- max(ind.col[["id_236"]])
+     corrplot(ind.col[["id_236"]], is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n", cl.lim = c(0, m),
+         number.cex = 1.5, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("lightblue","pink","red"))(200))
+   dev.off()
+   a <- rbind(ind.row[["id_65"]], ind.row[["id_236"]])
+   b <- rbind(ind.col[["id_65"]], ind.col[["id_236"]])
+   png(file = here("Plots", "data-ex-stack1.png"), width=700, height=700)
+     corrplot(a, is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n", cl.lim = c(0, max(a)),
+         number.cex = 1, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("lightblue","pink","red"))(200))
+   dev.off()
+   png(file = here("Plots", "data-ex-stack2.png"), width=700, height=700)
+     corrplot(b, is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n", cl.lim = c(0, max(b)),
+         number.cex = 1, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("lightblue","pink","red"))(200))
+   dev.off()
+```
+
+```{r CA Musical Genres}
+   row.stack.d <- data.frame(row.stack)
+   row.stack.d$genre <- rep(r, nrow(dat2))
+   row.stack.d$id <- rep(dat$id_char[-bad.den], each = 20)
+   CA.r <- CA(row.stack.d, graph = FALSE, row.sup = zero.rows.r, quali.sup = c(21, 22))
+```
+
+```{r CA Social Labels}
+   col.stack.d <- data.frame(col.stack)
+   col.stack.d$label <- rep(c, nrow(dat2))
+   col.stack.d$id <- rep(dat$id_char[-bad.den], each = 15)
+   CA.c <- CA(col.stack.d, graph = FALSE, row.sup = zero.rows.c, quali.sup = c(16, 17))
+```
+
+```{r Plot Data}
+     make.plot.dat <- function(x) { 
+         w <-  data.frame(x) %>% 
+         mutate(col.obj = gsub("\\..*","",rownames(x))) 
+         rownames(w) <- 1:nrow(x)
+         return(w)
+         }
+      col.gen.dat <-  data.frame(CA.r$col$coord) %>% 
+         mutate(col.obj = rownames(CA.r$col$coord)) #genre column scores
+      col.lab.dat <-  data.frame(CA.c$col$coord) %>% 
+         mutate(col.obj = rownames(CA.c$col$coord)) #label column scores
+      sup.gen.dat <- CA.r$quali.sup$coord[1:20, ] 
+      sup.lab.dat <- CA.c$quali.sup$coord[1:15, ] 
+      sup.gen.dat <- data.frame(sup.gen.dat, 
+                                col.obj = gsub("genre.", "", rownames(sup.gen.dat)))
+      rownames(sup.gen.dat) <- sup.gen.dat$col.obj
+      sup.lab.dat <- data.frame(sup.lab.dat, 
+                                col.obj = gsub("label.", "", rownames(sup.lab.dat)))
+      rownames(sup.lab.dat) <- sup.lab.dat$col.obj
+      row.gen.dat <- make.plot.dat(CA.r$row$coord) #genre row scores
+      row.lab.dat <- make.plot.dat(CA.c$row$coord) #label row scores
+```
+
+```{r Column Score Similarity Plots}
+   h <- 625
+   w <- 750
+   source(here("make.sim.plot.R"))
+   #genres
+   png(file = here("Plots", "ca-genre-col12.png"), width=w, height=h)
+   make.sim.plot(col.gen.dat, 1, 2, "red", l = .5)
+   dev.off()
+   png(file = here("Plots", "ca-genre-col13.png"), width=w, height=h)
+   make.sim.plot(col.gen.dat, 1, 3, "red", l = .5)
+   dev.off()
+   # labels
+   png(file = here("Plots", "ca-label-col12.png"), width=w, height=h)
+   make.sim.plot(col.lab.dat, 1, 2, "blue", l = .75)
+   dev.off()
+   png(file = here("Plots", "ca-label-col13.png"), width=w, height=h)
+   make.sim.plot(col.lab.dat, 1, 3, "blue", l = .75)
+   dev.off()
+```
+
+```{r Genre Cloud Plots}
+   source(here("make.fuzz.plot.R"))
+   h <- 625
+   w <- 750
+   png(file = here("Plots", "genre-proto-ex1.png"), width=w, height=h)
+      make.fuzz.plot(row.gen.dat, sup.gen.dat, seed = 125,
+                     1, 2, xl = .5, yl = .5, pa = .15,
+                     c("Folk", "Rap", "Opera"))
+   dev.off()
+   png(file = here("Plots", "genre-proto-ex2.png"), width=w, height=h)
+      make.fuzz.plot(row.gen.dat, sup.gen.dat, seed = 125,
+                     1, 2, xl = .5, yl = .5, pa = .15,
+                     c("Latin", "Bluegrass", "Classical"))
+   dev.off()
+   png(file = here("Plots", "genre-proto-ex3.png"), width=w, height=h)
+      make.fuzz.plot(row.gen.dat, sup.gen.dat, seed = 125,
+                     1, 3, xl = .5, yl = .5, pa = .15,
+                     c("Alt_Rock", "Reggae", "Broadway"))
+   dev.off()
+```
+  
+```{r Label Cloud Plots}
+   source(here("make.fuzz.plot.R"))
+   h <- 625
+   w <- 750
+   png(file = here("Plots", "label-proto-ex1.png"), width=w, height=h)
+      make.fuzz.plot(row.lab.dat, sup.lab.dat, 1, 2, ylb = 0.5,
+                     c("White", "Asian", "Black", "Hispanic"))
+   dev.off()
+   png(file = here("Plots", "label-proto-ex2.png"), width=w, height=h)
+      make.fuzz.plot(row.lab.dat, sup.lab.dat, 1, 3,
+                     c("Old", "Mid_Age", "Young"))
+   dev.off()
+   png(file = here("Plots", "label-proto-ex3.png"), width=w, height=h)
+      make.fuzz.plot(row.lab.dat, sup.lab.dat, 1, 3,
+                     c("Upper_Class", "Lower_Class", "Middle_Class"))
+   dev.off()
+   png(file = here("Plots", "label-proto-ex4.png"), width=w, height=h)
+      make.fuzz.plot(row.lab.dat, sup.lab.dat, 1, 3, xlb = 0.5, xlt = 0.5,
+                     c("College", "No_College"))
+   dev.off()
+```
+

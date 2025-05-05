@@ -337,7 +337,7 @@ Omar Lizardo
     </div>
 </div>
 
-  <p class="date">5/3/25</p>
+  <p class="date">5/4/25</p>
 </section>
 <section id="section" class="slide level2">
 <h2></h2>
@@ -370,18 +370,176 @@ Omar Lizardo
 </ul></li>
 </ul>
 </section>
-<section id="correspondence-plot-of-genre-column-scores" class="slide level2">
-<h2>Correspondence Plot of Genre Column Scores</h2>
-
-<img data-src="Plots/ca-genre-col12.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
-<section id="correspondence-plot-of-genre-column-scores-1" class="slide level2">
-<h2>Correspondence Plot of Genre Column Scores</h2>
-
-<img data-src="Plots/ca-genre-col13.png" class="r-stretch quarto-figure-center"><p class="caption">First and Third Dimensions</p></section>
-<section id="correspondence-plot-of-genre-column-scores-2" class="slide level2">
-<h2>Correspondence Plot of Genre Column Scores</h2>
-
-<img data-src="Plots/ca-genre-col14.png" class="r-stretch quarto-figure-center"><p class="caption">First and Fourth Dimensions</p></section>
+<section id="mondo-breiger-approach" class="slide level2">
+<h2>Mondo Breiger Approach</h2>
+<ul>
+<li>Each individual provides a “personal” two mode network of genres by social labels with corresponding affiliation matrix <span class="math inline">\(\mathbf{A}(p)\)</span>
+<ul>
+<li><span class="math inline">\(a^{(p)}_{gl} = 1\)</span> if individual <span class="math inline">\(p\)</span> associates genre <span class="math inline">\(g\)</span> with label <span class="math inline">\(l\)</span></li>
+</ul></li>
+<li>The personal genre projection is given by:
+<ul>
+<li><span class="math inline">\(\mathbf{G}(p) = \mathbf{A}(p)\mathbf{A}(p)^T\)</span></li>
+<li><span class="math inline">\(g^{(p)}_{ij}\)</span> records the <span class="math inline">\(p^{th}\)</span> individual’s perceived similarity between genres <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> based on their shared labels</li>
+<li><span class="math inline">\(g^{(p)}_{ii}\)</span> records the number of times individual <span class="math inline">\(p\)</span> associates genre <span class="math inline">\(i\)</span> with a label</li>
+</ul></li>
+</ul>
+</section>
+<section id="mondo-breiger-approach-1" class="slide level2">
+<h2>Mondo Breiger Approach</h2>
+<ul>
+<li>Each individual provides a “personal” two mode network of genres by social labels with corresponding affiliation matrix <span class="math inline">\(\mathbf{A}(p)\)</span>
+<ul>
+<li><span class="math inline">\(a^{(p)}_{gl} = 1\)</span> if individual <span class="math inline">\(p\)</span> associates genre <span class="math inline">\(g\)</span> with label <span class="math inline">\(l\)</span></li>
+</ul></li>
+<li>The personal label projection is given by:
+<ul>
+<li><span class="math inline">\(\mathbf{L}(p) = \mathbf{A}(p)^T\mathbf{A}(p)\)</span></li>
+<li><span class="math inline">\(l^{(p)}_{kl}\)</span> records the <span class="math inline">\(p^{th}\)</span> individual’s perceived similarity between labels <span class="math inline">\(k\)</span> and <span class="math inline">\(l\)</span> based on their shared genres</li>
+<li><span class="math inline">\(l^{(p)}_{kk}\)</span> records the number of times individual <span class="math inline">\(p\)</span> associates genre <span class="math inline">\(i\)</span> with a label</li>
+</ul></li>
+</ul>
+</section>
+<section id="individual-matrix-examples-two-mode" class="slide level2">
+<h2>Individual Matrix Examples (Two Mode)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex1.png"></p>
+<p></p><figcaption>id_65</figcaption><p></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex2.png"></p>
+<p></p><figcaption>id_236</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="individual-matrix-examples-two-mode-1" class="slide level2">
+<h2>Individual Matrix Examples (Two Mode)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex3.png"></p>
+<p></p><figcaption>id_1114</figcaption><p></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex4.png"></p>
+<p></p><figcaption>id_2002</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="example-row-projection" class="slide level2">
+<h2>Example Row Projection</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex1.png"></p>
+<p></p><figcaption>id_65</figcaption><p></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex1-rp.png"></p>
+<p></p><figcaption>id_65</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="example-column-projection" class="slide level2">
+<h2>Example Column Projection</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex1.png"></p>
+<p></p><figcaption>id_65</figcaption><p></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex1-cp.png"></p>
+<p></p><figcaption>id_65</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="example-row-projection-1" class="slide level2">
+<h2>Example Row Projection</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex2.png"></p>
+<p></p><figcaption>id_236</figcaption><p></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex2-rp.png"></p>
+<p></p><figcaption>id_236</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="example-column-projection-1" class="slide level2">
+<h2>Example Column Projection</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex2.png"></p>
+<p></p><figcaption>id_65</figcaption><p></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex2-cp.png"></p>
+<p></p><figcaption>id_65</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="stacked-matrices-examples" class="slide level2">
+<h2>Stacked Matrices Examples</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex-stack1.png"></p>
+<p></p><figcaption>id_65 and id_236 (Rows)</figcaption><p></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="Plots/data-ex-stack2.png"></p>
+<p></p><figcaption>id_65 and id_236 (Columns)</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="correspondence-plot-of-label-column-scores" class="slide level2">
 <h2>Correspondence Plot of Label Column Scores</h2>
 
@@ -390,70 +548,42 @@ Omar Lizardo
 <h2>Correspondence Plot of Label Column Scores</h2>
 
 <img data-src="Plots/ca-label-col13.png" class="r-stretch quarto-figure-center"><p class="caption">First and Third Dimensions</p></section>
-<section id="correspondence-plot-of-label-column-scores-2" class="slide level2">
-<h2>Correspondence Plot of Label Column Scores</h2>
-
-<img data-src="Plots/ca-label-col14.png" class="r-stretch quarto-figure-center"><p class="caption">First and Fourth Dimensions</p></section>
-<section id="correspondence-plot-of-genre-column-scores-3" class="slide level2">
+<section id="correspondence-plot-of-genre-column-scores" class="slide level2">
 <h2>Correspondence Plot of Genre Column Scores</h2>
 
-<img data-src="Plots/genre-sim-dens12.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
-<section id="correspondence-plot-of-label-column-scores-3" class="slide level2">
-<h2>Correspondence Plot of Label Column Scores</h2>
+<img data-src="Plots/ca-genre-col12.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
+<section id="correspondence-plot-of-genre-column-scores-1" class="slide level2">
+<h2>Correspondence Plot of Genre Column Scores</h2>
 
-<img data-src="Plots/label-sim-dens12.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
+<img data-src="Plots/ca-genre-col13.png" class="r-stretch quarto-figure-center"><p class="caption">First and Third Dimensions</p></section>
 <section id="correspondence-plot-of-genre-clouds" class="slide level2">
 <h2>Correspondence Plot of Genre Clouds</h2>
 
-<img data-src="Plots/genre-proto12.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
+<img data-src="Plots/genre-proto-ex1.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
 <section id="correspondence-plot-of-genre-clouds-1" class="slide level2">
 <h2>Correspondence Plot of Genre Clouds</h2>
 
-<img data-src="Plots/genre-proto13.png" class="r-stretch quarto-figure-center"><p class="caption">First and Third Dimensions</p></section>
+<img data-src="Plots/genre-proto-ex2.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
 <section id="correspondence-plot-of-genre-clouds-2" class="slide level2">
 <h2>Correspondence Plot of Genre Clouds</h2>
 
-<img data-src="Plots/genre-proto14.png" class="r-stretch quarto-figure-center"><p class="caption">First and Fourth Dimensions</p></section>
+<img data-src="Plots/genre-proto-ex3.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
 <section id="correspondence-plot-of-label-clouds" class="slide level2">
 <h2>Correspondence Plot of Label Clouds</h2>
 
-<img data-src="Plots/label-proto12-1.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
+<img data-src="Plots/label-proto-ex1.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
 <section id="correspondence-plot-of-label-clouds-1" class="slide level2">
 <h2>Correspondence Plot of Label Clouds</h2>
 
-<img data-src="Plots/label-proto12-2.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
+<img data-src="Plots/label-proto-ex2.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
 <section id="correspondence-plot-of-label-clouds-2" class="slide level2">
 <h2>Correspondence Plot of Label Clouds</h2>
 
-<img data-src="Plots/label-proto13.png" class="r-stretch quarto-figure-center"><p class="caption">First and Third Dimensions</p></section>
+<img data-src="Plots/label-proto-ex3.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p></section>
 <section id="correspondence-plot-of-label-clouds-3" class="slide level2">
 <h2>Correspondence Plot of Label Clouds</h2>
 
-<img data-src="Plots/label-proto14.png" class="r-stretch quarto-figure-center"><p class="caption">First and Fourth Dimensions</p></section>
-<section id="genre-ridge-plot" class="slide level2">
-<h2>Genre Ridge Plot</h2>
-
-<img data-src="Plots/genre-ridge-dim1.png" class="r-stretch quarto-figure-center"><p class="caption">First Dimension</p></section>
-<section id="genre-ridge-plot-1" class="slide level2">
-<h2>Genre Ridge Plot</h2>
-
-<img data-src="Plots/genre-ridge-dim2.png" class="r-stretch quarto-figure-center"><p class="caption">Second Dimension</p></section>
-<section id="genre-ridge-plot-2" class="slide level2">
-<h2>Genre Ridge Plot</h2>
-
-<img data-src="Plots/genre-ridge-dim3.png" class="r-stretch quarto-figure-center"><p class="caption">Third Dimension</p></section>
-<section id="label-ridge-plot" class="slide level2">
-<h2>Label Ridge Plot</h2>
-
-<img data-src="Plots/label-ridge-dim1.png" class="r-stretch quarto-figure-center"><p class="caption">First Dimension</p></section>
-<section id="label-ridge-plot-1" class="slide level2">
-<h2>Label Ridge Plot</h2>
-
-<img data-src="Plots/label-ridge-dim2.png" class="r-stretch quarto-figure-center"><p class="caption">Second Dimension</p></section>
-<section id="label-ridge-plot-2" class="slide level2">
-<h2>Label Ridge Plot</h2>
-
-<img data-src="Plots/label-ridge-dim3.png" class="r-stretch quarto-figure-center"><p class="caption">Third Dimension</p><div class="footer footer-default">
+<img data-src="Plots/label-proto-ex4.png" class="r-stretch quarto-figure-center"><p class="caption">First and Second Dimensions</p><div class="footer footer-default">
 <p>https://github.com/olizardo/cultural-consensus-musical-genres</p>
 </div>
 </section>
