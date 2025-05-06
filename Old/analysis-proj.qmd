@@ -33,7 +33,6 @@ execute:
    dat <- bind_cols(tibble(id_char = paste("id", sapply(dat[, 1], as.character), sep = "_")), dat) %>% 
    select(id_char, classicalfemale:hvymtluc, -ends_with("none")) %>%  #selecting relevant columns
    na.omit() #removing missing values
-   head(dat)
 ```
 
 ```{r Creating individual matrices}

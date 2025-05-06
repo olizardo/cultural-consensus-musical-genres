@@ -53,65 +53,107 @@ Lizardo, O. and Skiles, S., 2016. Cultural objects as prisms: Perceived audience
   - $l^{(p)}_{kl}$ records the $p^{th}$ individual's perceived similarity between labels $k$ and $l$ based on their shared genres
   - $l^{(p)}_{kk}$ records the number of times individual $p$ associates genre $i$ with a label
   
-## Individual Matrix Examples (Two Mode)
+## Individual Matrix Examples 
 :::: {.columns}
 ::: {.column width="50%"}
-![id_65](Plots/data-ex1.png)
+![id_65 Affiliation Matrix](Plots/data-ex-af1.png)
 :::
 ::: {.column width="50%"}
-![id_236](Plots/data-ex2.png)
+![id_236 Affiliation Matrix](Plots/data-ex-af2.png)
 :::
 ::::
 
-## Individual Matrix Examples (Two Mode)
+## Individual Matrix Examples 
 :::: {.columns}
 ::: {.column width="50%"}
-![id_1114](Plots/data-ex3.png)
+![id_1114 Affiliation Matrix](Plots/data-ex-af3.png)
 :::
 ::: {.column width="50%"}
-![id_2002](Plots/data-ex4.png)
+![id_2002 Affiliation Matrix](Plots/data-ex-af4.png)
 :::
 ::::
 
 ## Example Row Projection
 :::: {.columns}
 ::: {.column width="50%"}
-![id_65](Plots/data-ex1.png)
+![id_65 Affiliation Matrix](Plots/data-ex-af1.png)
 :::
 ::: {.column width="50%"}
-![id_65](Plots/data-ex1-rp.png)
+![id_65 Row Projection](Plots/data-ex-rp1.png)
 :::
 ::::
 
 ##  Example Column Projection
 :::: {.columns}
 ::: {.column width="50%"}
-![id_65](Plots/data-ex1.png)
+![id_65 Affiliation Matrix](Plots/data-ex-af1.png)
 :::
 ::: {.column width="50%"}
-![id_65](Plots/data-ex1-cp.png)
+![id_65 Column Projection](Plots/data-ex-cp1.png)
 :::
 ::::
 
 ##  Example Row Projection
 :::: {.columns}
 ::: {.column width="50%"}
-![id_236](Plots/data-ex2.png)
+![id_236 Affiliation Matrix](Plots/data-ex-af2.png)
 :::
 ::: {.column width="50%"}
-![id_236](Plots/data-ex2-rp.png)
+![id_236 Row Projection](Plots/data-ex-rp2.png)
 :::
 ::::
 
 ##  Example Column Projection
 :::: {.columns}
 ::: {.column width="50%"}
-![id_65](Plots/data-ex2.png)
+![id_236 Affiliation Matrix](Plots/data-ex-af2.png)
 :::
 ::: {.column width="50%"}
-![id_65](Plots/data-ex2-cp.png)
+![id_236 Column Projection](Plots/data-ex-cp2.png)
 :::
 ::::
+
+##  Example Row Backbone
+:::: {.columns}
+::: {.column width="50%"}
+![id_65 Row Projection](Plots/data-ex-rp1.png)
+:::
+::: {.column width="50%"}
+![id_65 Row Backbone](Plots/data-ex-rbb1.png)
+:::
+::::
+
+##  Example Row Backbone
+:::: {.columns}
+::: {.column width="50%"}
+![id_236 Row Projection](Plots/data-ex-rp2.png)
+:::
+::: {.column width="50%"}
+![id_236 Row Backbone](Plots/data-ex-rbb2.png)
+:::
+::::
+
+
+##  Example Column Backbone
+:::: {.columns}
+::: {.column width="50%"}
+![id_65 Column Projection](Plots/data-ex-cp1.png)
+:::
+::: {.column width="50%"}
+![id_65 Column Backbone](Plots/data-ex-cbb1.png)
+:::
+::::
+
+##  Example Column Backbone
+:::: {.columns}
+::: {.column width="50%"}
+![id_236 Column Projection](Plots/data-ex-cp2.png)
+:::
+::: {.column width="50%"}
+![id_236 Column Backbone](Plots/data-ex-cbb2.png)
+:::
+::::
+
 
 ##  Stacked Matrices Examples
 :::: {.columns}
@@ -123,17 +165,27 @@ Lizardo, O. and Skiles, S., 2016. Cultural objects as prisms: Perceived audience
 :::
 ::::
 
-## Correspondence Plot of Label Column Scores
-![First and Second Dimensions](Plots/ca-label-col12.png)
-
-## Correspondence Plot of Label Column Scores
-![First and Third Dimensions](Plots/ca-label-col13.png)
+## CA Eigenvalue Scree Plot
+:::: {.columns}
+::: {.column width="50%"}
+![Stacked Genres](Plots/scree-genres.png)
+:::
+::: {.column width="50%"}
+![Stacked Labels](Plots/scree-labels.png)
+:::
+::::
 
 ## Correspondence Plot of Genre Column Scores
 ![First and Second Dimensions](Plots/ca-genre-col12.png)
 
 ## Correspondence Plot of Genre Column Scores
 ![First and Third Dimensions](Plots/ca-genre-col13.png)
+
+## Correspondence Plot of Label Column Scores
+![First and Second Dimensions](Plots/ca-label-col12.png)
+
+## Correspondence Plot of Label Column Scores
+![First and Third Dimensions](Plots/ca-label-col13.png)
 
 ## Correspondence Plot of Genre Clouds
 ![First and Second Dimensions](Plots/genre-proto-ex1.png)
@@ -143,6 +195,18 @@ Lizardo, O. and Skiles, S., 2016. Cultural objects as prisms: Perceived audience
 
 ## Correspondence Plot of Genre Clouds
 ![First and Second Dimensions](Plots/genre-proto-ex3.png)
+
+## Correspondence Plot of Genre Clouds
+![First and Second Dimensions](Plots/genre-proto-ex4.png)
+
+## Correspondence Plot of Genre Clouds
+![First and Second Dimensions](Plots/genre-proto-ex5.png)
+
+## Correspondence Plot of Genre Clouds
+![First and Second Dimensions](Plots/genre-proto-ex6.png)
+
+## Correspondence Plot of Genre Clouds
+![First and Second Dimensions](Plots/genre-proto-ex7.png)
 
 ## Correspondence Plot of Label Clouds
 ![First and Second Dimensions](Plots/label-proto-ex1.png)
@@ -155,3 +219,77 @@ Lizardo, O. and Skiles, S., 2016. Cultural objects as prisms: Perceived audience
 
 ## Correspondence Plot of Label Clouds
 ![First and Second Dimensions](Plots/label-proto-ex4.png)
+
+## Correspondence Plot of Label Clouds
+![First and Second Dimensions](Plots/label-proto-ex5.png)
+
+## Ridge Plot of Genre Clouds
+![First Dimension](Plots/genre-ridge-dim1.png)
+
+## Ridge Plot of Genre Clouds
+![Second Dimension](Plots/genre-ridge-dim2.png)
+
+## Ridge Plot of Genre Clouds
+![Third Dimension](Plots/genre-ridge-dim3.png)
+
+## Ridge Plot of Label Clouds
+![First Dimension](Plots/label-ridge-dim1.png)
+
+## Ridge Plot of Label Clouds
+![Second Dimension](Plots/label-ridge-dim2.png)
+
+## Ridge Plot of Label Clouds
+![Third Dimension](Plots/label-ridge-dim3.png)
+
+## Cloud Variance
+:::: {.columns}
+::: {.column width="47%"}
+![Genres](Plots/genre-var.png)
+:::
+::: {.column width="47%"}
+![Labels](Plots/label-var.png)
+:::
+::::
+
+## Cloud Skewness
+:::: {.columns}
+::: {.column width="47%"}
+![Skewness of Genres (Dim 1)](Plots/genre-skew1.png)
+:::
+::: {.column width="47%"}
+![Skewness of Genres (Dim 2)](Plots/genre-skew2.png)
+:::
+::::
+
+## Cloud Kurtosis
+:::: {.columns}
+::: {.column width="47%"}
+![Kurtosis of Genres (Dim 1)](Plots/genre-kurt1.png)
+:::
+::: {.column width="47%"}
+![Kurtosis of Genres (Dim 2)](Plots/genre-kurt2.png)
+:::
+::::
+::::
+
+## Cloud Skewness
+:::: {.columns}
+::: {.column width="47%"}
+![Skewness of Labels (Dim 1)](Plots/label-skew1.png)
+:::
+::: {.column width="47%"}
+![Skewness of Labels (Dim 2)](Plots/label-skew2.png)
+:::
+::::
+
+
+## Cloud Kurtosis
+:::: {.columns}
+::: {.column width="47%"}
+![Kurtosis of Labels (Dim 1)](Plots/label-kurt1.png)
+:::
+::: {.column width="47%"}
+![Kurtosis of Labels (Dim 2)](Plots/label-kurt2.png)
+:::
+::::
+::::
