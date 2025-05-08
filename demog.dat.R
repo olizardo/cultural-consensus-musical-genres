@@ -77,7 +77,7 @@ demog.dat <- function() {
                                               "Some Coll.", 
                                               "Bachelors", 
                                               "Prof.Deg",
-                                              "PhD"), ordered = FALSE),
+                                              "PhD"), ordered = TRUE),
              college = if_else(educ >= 4, 1, 0),
              working = if_else(empstat == 1, 1, 0),
              student = if_else(empstat == 3, 1, 0),
@@ -90,9 +90,6 @@ demog.dat <- function() {
              mid.c = if_else(percclass == 3, 1, 0),
              lo.inc = if_else(incmid <= 25000, 1, 0)
              ) %>% 
-      dplyr::select(c("id", "educ.f", "gender", "age", "parcoll", 
-                      "incmid", "college", "working", "wrk.c", "mid.c",
-                      "student", "retired", "region.f", "lo.inc",
-                      "asn", "blk", "his", "mro"))
+      dplyr::select(c("id", "educ.f", "age", "race", "subjclass"))
    return(x)
 }
