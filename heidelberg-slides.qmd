@@ -6,6 +6,7 @@ institute: "*University of California, Los Angeles*"
 date: "`r Sys.Date()`"
 format:
   revealjs:
+    embed-resources: true
     incremental: false 
     theme: simple 
     smaller: true
@@ -17,11 +18,13 @@ format:
 
 ## Genres and Categories
 
-- Notion of Genre Fundamental to the Sociology of Taste
-- Perennially Contested Category
+- Notion of **genre** fundamental to the Sociology of Taste
+- Key organizing principle
+- Perennially **contested** Category
 - Basic Problem:
   - Our intuitions imply **fuzziness** and **distributional** thinking
   - But our methods mostly rely on **crisp** classifications and **central tendencies**
+  - Calls to either reject or radically revise the notion
 
 :::aside
 DiMaggio, P. (1987). Classification in art. *American Sociological Review*, 440-455.
@@ -31,10 +34,11 @@ Lena, J. C. (2015). Genre: Relational approaches to the sociology of music. In *
 
 ## Genres and Categories
 
-- Notion of **Genre** Fundamental to the Sociology of Taste
-- Perennially Contested Category
+- Notion of **genre** fundamental to the Sociology of Taste
+- Key organizing principle
+- Perennially **contested** Category
 - Recent work on **Measuring Culture** has begun to make headway on the issue
-  - Relational approaches applying network methods
+  - **Relational** approaches applying network methods
     - Focus on fuzziness and overlapping categories
   - **Geometric Data Analysis**
     - Focus on distributions of judgments in a relational space
@@ -53,8 +57,8 @@ Lizardo, O. (2024). From Macrogenres to microgenres via relationality. *Poetics*
   - **Relational Class Analysis**
   - **Correlational Class Analysis**
   - Measuring **Schemas** from Survey and Discourse Data
-- Folk categories are revealed by measuring "what goes with what" at the level of personal culture
-- Focus on *heterogeneity* across clusters of individuals and items
+- Folk categories are revealed by measuring **what goes with what** at the level of personal culture
+- Focus on **heterogeneity** across clusters of individuals and items
 
 :::aside
 Boutyline, A., & Soter, L. K. (2021). Cultural schemas: What they are, how to find them, and what to do once you’ve caught one. *American Sociological Review*, 86(4), 728-758.
@@ -66,13 +70,13 @@ Goldberg, A., & Singell, M. H. (2024). The sociology of interpretation. *Annual 
 
 
 ## The sociology of Taste
--  Focused on the dual linkage between two systems of categories:
-  - Genre categories developed in fields of cultural production (scenes, industries)
-  - Social categories endowed with ritual potency and social validity constitutive of status orders 
+-  Focused on the objective **dual linkage** between two systems of categories:
+  - **Genre categories** developed in fields of cultural production (scenes, industries)
+  - **Social categories** endowed with ritual potency and social validity constitutive of status orders 
 - Basic intuition:
   - Genres are defined by the categories of people who choose them
   - Categories of persons are defined by the genres they choose
-- Duality!  
+- Yet examining **folk construals** of these dual linkages not a common focus  
 
 :::aside
 Breiger, R. L. (1974). The duality of persons and groups. *Social Forces*, 53(2), 181-190.
@@ -82,13 +86,16 @@ Bryson, B. (1996). " Anything but heavy metal": Symbolic exclusion and musical d
 Lizardo, O. and Skiles, S., 2016. Cultural objects as prisms: Perceived audience composition of musical genres as a resource for symbolic exclusion. *Socius*, 2, p.2378023116641695.
 :::
 
-## The sociology of Taste
+## Questions
 - We can apply lessons learned from the **relational**, **geometric**, and **schematic** turns in measuring culture to the problem of genre in the sociology of taste
-- Investigate folk schemas regarding the (explicit) associations between genre categories and categories of people
-- Focus on heterogeneity and the distribution of judgments across the social space
+  - From **crisp** definitions to **fuzzy** categories
+  - Focus on **heterogeneity** and the distribution of judgments across the social space
+- We can also move beyond the exclusive focus on objective linkages between genre categories (and cultural objects) and social demographic position 
+  - Investigate folk schemas regarding the **subjective folk construals** of the link between genre categories and categories of people
+  - Need data containing perceived linkages between genre and social **categories**
 
 ## Data
-- Data on cultural tastes among a weighted representative sample of Americans collected in Summer of 2012
+- Data on cultural tastes among a (weighted) representative sample of Americans collected in Summer of 2012
   - $N = 2,250$
 - Like GSS 1993 survey included items assessing respondents’ likes and dislikes for 20 categories of musical style**
   -  Inclusion of a **perceptual** module
@@ -113,9 +120,9 @@ Lizardo, O. and Skiles, S., 2016. Cultural objects as prisms: Perceived audience
 - We can treat the association data provided by respondents as **cognitive two-mode data**
   - In analogy with Krackhardt-style data for one-mode networks
   - Persons provide *perceived* associations between **musical genres** and **social labels**
-- Use relational techniques to extract the "backbone" of the perceived associations
+- Use relational techniques to extract the **backbone** of the perceived associations isolating the most important ones:
   - Dual Projection**
-  - Backbone extraction***
+  - Binarizing and via Backbone extraction***
   
 :::aside
 ** Everett, M. G., & Borgatti, S. P. (2013). The dual-projection approach for two-mode networks. *Social Networks*, 35(2), 204-210.
@@ -130,8 +137,8 @@ Lizardo, O. and Skiles, S., 2016. Cultural objects as prisms: Perceived audience
 - Model the backbone of the person-specific projected networks jointly using: 
   - Stacked **Correspondence Analysis****
   - Geometric Data Analysis of the various **clouds of individuals*****
+  - Regression, clustering and other methods
 
-  
 :::aside
 ** Batchelder, W. H., Kumbasar, E., & Boyd, J. P. (1997). Consensus analysis of three‐way social network data. *Journal of Mathematical Sociology*, 22(1), 29-58.
 
@@ -148,23 +155,23 @@ Lizardo, O. and Skiles, S., 2016. Cultural objects as prisms: Perceived audience
 
 ## Stacked CA Analyses
 - Three sets of **scores**:
-  - row-scores are **person-specific** judgments of the relative similarity of genres and labels
-  - column-scores represent the **aggregate judgment** of the relative similarity of genres (with respect to labels) and labels (with respect to genres)
-  - Supplementary scores for genres and labels represent the **centroid** of the cloud of person-specific judgments
+  - **Row scores** are **person-specific** judgments of the relative similarity of genres and labels
+  - **Column scores** represent the **aggregate judgment** of the relative similarity of genres (with respect to labels) and labels (with respect to genres)
+  - **Supplementary scores** for genres and labels represent the **centroid** of the cloud of person-specific judgments
+- We can examine heterogeneity in folk understandings of genre and social categories by looking at how the multiple **cloud of individuals** distribute themselves along the **principal axes**
     
 ## Stacked CA Analyses
 - Three sets of **scores**:
-  - row-scores are **person-specific** judgments of the relative similarity of genres and labels
-  - column-scores represent the **aggregate judgment** of the relative similarity of genres (with respect to labels) and labels (with respect to genres)
-  - Supplementary scores for genres and labels represent the **centroid** of the cloud of person-specific judgments
-- Multiple **clouds of individuals**
-  - Projected into genre space (one cloud per genre)
-  - Projected into label space (one cloud per label)
+  - **Row scores** are **person-specific** judgments of the relative similarity of genres and labels
+  - **Column scores** represent the **aggregate judgment** of the relative similarity of genres (with respect to labels) and labels (with respect to genres)
+  - **Supplementary scores** for genres and labels represent the **centroid** of the cloud of person-specific judgments
+- Multiple **clouds of individuals**:
+  - Projected into **genre space** (one cloud per genre)
+  - Projected into **social label space **(one cloud per label)
     - Individual specific clouds (across all genres and labels)
     - Sub-clouds in each space based on individual characteristics
   
 ## Mondo Breiger Approach**
-
 - Each individual provides a "personal" two mode network of genres by social labels with corresponding affiliation matrix $\mathbf{A}(p)$
   - $a^{(p)}_{gl} = 1$ if individual $p$ associates genre $g$ with label $l$
 - The personal genre projection is given by:
@@ -332,7 +339,6 @@ Lee, M., & Martin, J. L. (2018). Doorway to the dharma of duality. *Poetics*, 68
 :::
 ::::
 
-
 ## Correspondence Plot of Genre Column Scores
 ![First and Second Dimensions](Plots/ca-genre-col12.png)
 
@@ -387,17 +393,11 @@ Lee, M., & Martin, J. L. (2018). Doorway to the dharma of duality. *Poetics*, 68
 ## Ridge Plot of Genre Clouds
 ![Second Dimension](Plots/genre-ridge-dim2.png)
 
-## Ridge Plot of Genre Clouds
-![Third Dimension](Plots/genre-ridge-dim3.png)
-
 ## Ridge Plot of Label Clouds
 ![First Dimension](Plots/label-ridge-dim1.png)
 
 ## Ridge Plot of Label Clouds
 ![Second Dimension](Plots/label-ridge-dim2.png)
-
-## Ridge Plot of Label Clouds
-![Third Dimension](Plots/label-ridge-dim3.png)
 
 ## Cloud Variance
 :::: {.columns}
@@ -602,4 +602,48 @@ Lee, M., & Martin, J. L. (2018). Doorway to the dharma of duality. *Poetics*, 68
 :::
 ::::
 
+## Group-Specific Genre Clouds
+:::: {.columns}
+::: {.column width="55%"}
+![](Plots/demog-college-educ.png)
+:::
+::: {.column width="45%"}
+![Variance of Age Clouds](Plots/demog-college-educ-var.png)
+:::
+::::
+
+## Group-Specific Genre Clouds
+:::: {.columns}
+::: {.column width="55%"}
+![](Plots/demog-nocollege-educ.png)
+:::
+::: {.column width="45%"}
+![Variance of Age Clouds](Plots/demog-nocollege-educ-var.png)
+:::
+::::
+
+## Discussion and Conclusion
+- Exploiting the sociological duality of **genres** and **social labels** to extract **associational schemas** for both
+
+- Combining **relational** and **geometric** methods to examine central tendencies (*centroids*) and heterogeneity (*variance*) simultaneously
+- Move across multiple **levels**
+  - Individual (typical/atypical)
+  - Category
+  - Group (Demographics)
+  - System
+- Examining variation in **meaning consensus** across levels
+
+## Final Slide
+
+- Thanks!
+
+:::aside
+olizardo@soc.ucla.edu
+:::
+
+## Ridge Plot of Genre Clouds
+![Third Dimension](Plots/genre-ridge-dim3.png)
+
+## Ridge Plot of Label Clouds
+![Third Dimension](Plots/label-ridge-dim3.png)
 

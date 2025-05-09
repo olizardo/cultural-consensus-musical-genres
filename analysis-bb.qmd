@@ -635,6 +635,17 @@ execute:
    make.demog.plot(make.demog.dat(row.lab.dat.id, "Upper_Class", "subjclass"), 
                     "Upper_Class", "subjclass", r = 3)   
    dev.off()
+   
+   
+   # Education
+   png(file = here("Plots", "demog-college-educ.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.lab.dat.id, "College", "educ.f"), 
+                    "College", "educ.f", r = 3)   
+   dev.off()
+   png(file = here("Plots", "demog-nocollege-educ.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.lab.dat.id, "No_College", "educ.f"), 
+                    "No_College", "educ.f", r = 3)   
+   dev.off()
 ```
 
 ```{r Demographic Specific Cloud Variance Plots}
@@ -711,6 +722,16 @@ execute:
    png(file = here("Plots", "demog-upper-subjclass-var.png"), width=w, height=h)
    make.var.plot.demog(make.demog.var.dat(row.lab.dat.id, 
                                           "Upper_Class", "subjclass"), ps = 12) 
+   dev.off()
+   
+   # Education
+   png(file = here("Plots", "demog-college-educ-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.lab.dat.id, 
+                                          "College", "educ.f"), ps = 12) 
+   dev.off()
+   png(file = here("Plots", "demog-nocollege-educ-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.lab.dat.id, 
+                                          "No_College", "educ.f"), ps = 12) 
    dev.off()
 ```
 
