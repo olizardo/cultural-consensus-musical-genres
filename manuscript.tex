@@ -1,0 +1,61 @@
+\documentclass[12pt]{article}
+\usepackage[left=1.15in, right=1.15in, top=1in, bottom=1.5in]{geometry}
+\usepackage{natbib}
+\usepackage{verbatim}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\bibpunct[: ]{(}{)}{;}{a}{}{,} 
+\usepackage{authblk}
+\renewcommand\Authfont{\normalsize}
+\renewcommand\Affilfont{\footnotesize}
+
+\begin{document}
+\title{Revealing Folk Schemas of Musical Genre and Social Category Associations via Relational and Geometric Methods\thanks{Reserved for acknowledgments}}
+\author[1]{Omar Lizardo\thanks{olizardo@soc.ucla.edu}}
+\affil[1]{Department of Sociology, UCLA}
+
+\renewcommand\Authands{ and }
+
+\date{\normalsize \today}	
+\maketitle
+
+\newpage
+\begin{abstract}
+\end{abstract}
+\newpage
+\section*{Introduction}
+The notion of musical genre stands as a fundamental concept within the Sociology of Taste, operating as a key organizing principle in understanding cultural consumption and preference \citep{dimaggio1987classification-758, lena2012banding-4b5, lena2008classification-1d7}. Despite its centrality, genre remains a perennially contested category \citep{lena2015relational-21f, vlegels2017music-360}. A core challenge lies in the disparity between intuitive understanding, which suggests that genres are fuzzy, overlapping, and problematic in their boundaries \citep{lizardo2024from-ddd, goldberg2016what-4e3}, and traditional sociological methodologies that often rely on crisp classifications of genre boundaries and measurements of central tendencies \citep{monk2022inequality-699}. This inherent tension has previously led to calls for either outright rejection or radical revision of the genre concept itself \citep{lena2015relational-21f}.
+
+Recent advancements in the field of culture measurement have begun to provide promising avenues for addressing this conundrum. Specifically, relational approaches utilizing network methods and Geometric Data Analysis have emerged, focusing on the inherent fuzziness and overlapping nature of categories \citep{lizardo2024from-ddd}. These methodologies shift the analytical focus towards the distributions of judgments within a relational space \citep{puetz2017fields-f30}. Conceptually, this work employs relational imagery to deconstruct categories as clusters of associations between elements \citep{mcdonnell2024making-b02}, thereby revealing ``folk categories'' by empirically measuring what elements are perceived to ``go with what'' at the level of individual cultural understanding \citep{goldberg2018beyond-f2f}. A key benefit of these approaches is their ability to illuminate heterogeneity across clusters of individuals and cultural items \citep{goldberg2011mapping-77a, vlegels2017music-360}.
+
+Historically, the sociology of taste has concentrated on the objective dual linkage between two primary systems of categories: Genre categories, as developed within cultural production fields like scenes and industries, and social categories, endowed with ritual potency and constitutive of status orders \citep{bourdieu1984distinction-835, bourdieu1993field-8ad, dimaggio1987classification-758, lena2012banding-4b5}. This framework operates on the basic intuition that genres are defined by the types of people who prefer them, and, conversely, categories of people are defined by the genres they choose \citep{breiger2000tool-db3, lizardo2016cultural-aaa}. However, a less common focus in research has been the direct examination of folk construals of these dual linkages, that is, how individuals subjectively perceive the connections between musical genres and social groups \citep{lizardo2016cultural-aaa}.
+
+This paper applies insights derived from the relational, geometric, and schematic turns in measuring culture \citep{goldberg2011mapping-77a, rouanet2000geometric-a44} to the enduring problem of genre within the sociology of taste. My primary objective is to transition analytical perspectives from crisp definitions to fuzzy categories, emphasizing heterogeneity and the distribution of judgments across the social space \citep{romney1986culture-aaa}. Beyond the exclusive focus on objective linkages between genre categories and socio-demographic positions, I aim to investigate folk schemas concerning the subjective folk construals of the link between genre categories and categories of people. By exploiting the sociological duality of genres and social labels \citep{basov2017duality-24b, breiger1974duality-1d0}, I seek to extract detailed associational schemas for both. This involves combining network-analytic and geometric methods to simultaneously examine both central tendencies (centroids) and heterogeneity (variance) in these perceived associations across multiple analytical levels: individual, category, group (demographics), and the broader system.
+
+\section*{Data and Analytic Approach}
+To achieve these objectives, I analyze a comprehensive dataset on cultural tastes, collected in the Summer of 2012 from a weighted representative sample of Americans (N = 2,250) \citep{lizardo2016cultural-aaa, lizardo2015musical-8c6, lizardo2024from-ddd}. This dataset, similar to the GSS 1993 survey, includes items assessing respondents' likes, dislikes, and frequency of consumption across twenty distinct musical style categories. Crucially, this dataset incorporates a \textit{perceptual} module that prompted respondents to identify characteristics describing the typical fans of each genre category, allowing them to select all applicable traits from a predefined list of socio-demographic labels (e.g., Male, Female, Young, College Educated, Asian, Black, Hispanic, White, and various social classes). 
+
+\begin{table}
+    \caption{.}
+    \centering
+    \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Tabs/zinf-reg.png}
+    \label{tab:zinf}
+\end{table}
+
+Our methodological approach treats this rich association data as cognitive two-mode data, conceptually analogous to Krackhardt-style data used in one-mode networks \citep{batchelder1997consensus-f5c, kumbasar1994systematic-213}, where each person provides their perceived associations between musical genres and social labels. I use relational techniques, including Dual Projection and Backbone extraction \citep{everett2013dual-projection-c89, neal2014backbone-b29}, to distill and isolate the most significant perceived associations from the raw data. Subsequently, the backbone of these person-specific projected networks is jointly modeled using Stacked Correspondence Analysis and Geometric Data Analysis \citep{roux2004geometric-65c}. 
+
+This analytical framework generates three sets of scores: person-specific judgments of the relative similarity of genres and labels (row scores), aggregate judgments of genre and label similarity (column scores), and supplementary scores for genres and labels representing the centroid of the cloud of person-specific judgments. Ultimately, this allows me to examine heterogeneity in folk understandings by observing how multiple clouds of individuals (projected into both genre and social label spaces) distribute themselves along principal axes, providing critical insights into the variation in meaning consensus across different levels of analysis.
+
+\section*{Workflow Illustration}
+
+\section*{Results}
+
+\section*{Discussion and Conclusions}
+
+\newpage
+\bibliography{references}
+\bibliographystyle{apalike}
+\end{document}
