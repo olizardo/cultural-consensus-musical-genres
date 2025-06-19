@@ -40,21 +40,27 @@ execute:
 ```
 
 ```{r Creating individual matrices}
+   make.mat <- function(x) {
+      x <- matrix(as.numeric(x), 20, 15, byrow = TRUE)
+      return(x)
+   }
    row.breiger <- function(x) {
-      x %*% t(x)
+      x <- x %*% t(x)
+      return(x)
       }
    col.breiger <- function(x) {
-      t(x) %*% x
+      x <- t(x) %*% x
+      return(x)
       }
-   bb <- function(x) {
-      x <- suppressMessages(disparity(x, alpha = 0.25, narrative = FALSE))
+   bb <- function(x, a = 0.25) {
+      x <- suppressMessages(disparity(x, alpha = a, narrative = FALSE))
       return(x)
       }
    den <- rowSums(dat[,2:301])/300
    bad.den <- which(den > .9 | den < 0.1)
    dat2 <- dat[-c(bad.den), 2:301]
    ind.list <- split(dat2, seq(nrow(dat2))) # splitting each row of data frame into list objects
-   ind.mat <- lapply(ind.list, function(x) {matrix(as.numeric(x), 20, 15, byrow = TRUE)}) # creating individual two mode network of genre by labels
+   ind.mat <- lapply(ind.list, make.mat) # creating individual two mode network of genre by labels
       r <- c("Classical", "Opera", "Jazz", "Broadway", "Easy", "Big_Band", "Classic_Rock", "Country", "Bluegrass", "Folk", "Gospel", "Latin", "Rap", "Blues", "Reggae", "Pop", "Contemp_Rock", "Alt_Rock", "Dance", "Metal")
        c <- c("Female", "Male", "White", "Black", "Hispanic", "Asian", "College", "No_College", "Young", "Mid_Age", "Old", "Lower_Class", "Working_Class", "Middle_Class", "Upper_Class")
    ind.mat <- lapply(ind.mat, function(x) {rownames(x) <- r; x}) # naming individual rows
@@ -111,29 +117,45 @@ execute:
          rownames(w) <- 1:nrow(x)
          return(w)
          }
+      #genre column scores data frame
       col.gen.dat <-  data.frame(CA.r$col$coord) %>% 
-         mutate(col.obj = rownames(CA.r$col$coord)) #genre column scores
+         mutate(col.obj = rownames(CA.r$col$coord)) 
+      #label column scores data frame
       col.lab.dat <-  data.frame(CA.c$col$coord) %>% 
-         mutate(col.obj = rownames(CA.c$col$coord)) #label column scores
+         mutate(col.obj = rownames(CA.c$col$coord)) 
+      #supplementary scores data frame for genres
       sup.gen.dat <- CA.r$quali.sup$coord[1:20, ] 
-      sup.lab.dat <- CA.c$quali.sup$coord[1:15, ] 
       sup.gen.dat <- data.frame(sup.gen.dat, 
                                 col.obj = gsub("genre.", "", rownames(sup.gen.dat)))
-      rownames(sup.gen.dat) <- sup.gen.dat$col.obj
+      rownames(sup.gen.dat) <- 1:nrow(sup.gen.dat)
+      #supplementary scores data frame for labels
+      sup.lab.dat <- CA.c$quali.sup$coord[1:15, ] 
       sup.lab.dat <- data.frame(sup.lab.dat, 
                                 col.obj = gsub("label.", "", rownames(sup.lab.dat)))
-      rownames(sup.lab.dat) <- sup.lab.dat$col.obj
-      row.gen.dat <- make.plot.dat(CA.r$row$coord) #genre row scores
-      row.lab.dat <- make.plot.dat(CA.c$row$coord) #label row scores
-   ind.gen.sup <- CA.r$quali.sup$coord %>% 
-      data.frame() %>% 
-      slice(21:nrow(CA.r$quali.sup$coord)) 
-   ind.gen.sup$id_char <- str_sub(rownames(ind.gen.sup), 4, -1)
-   ind.lab.sup <- CA.c$quali.sup$coord %>% 
-      data.frame() %>% 
-      slice(21:nrow(CA.c$quali.sup$coord)) 
-   ind.lab.sup$id_char <- str_sub(rownames(ind.lab.sup), 4, -1)
+      rownames(sup.lab.dat) <- 1:nrow(sup.lab.dat)
+      #genre row scores
+      row.gen.dat <- make.plot.dat(CA.r$row$coord) 
+      #label row scores
+      row.lab.dat <- make.plot.dat(CA.c$row$coord) 
+      #supplementary individual scores for genres
+      ind.gen.sup <- CA.r$quali.sup$coord %>% 
+         data.frame() %>% 
+         slice(21:nrow(CA.r$quali.sup$coord)) %>% 
+         mutate(id_char = str_sub(rownames(ind.gen.sup), 4, -1))
+      row.names(ind.gen.sup) <- 1:nrow(ind.gen.sup)
+      #supplementary individual scores for labels
+      ind.lab.sup <- CA.c$quali.sup$coord %>% 
+         data.frame() %>% 
+         slice(16:nrow(CA.c$quali.sup$coord)) %>% 
+         mutate(id_char = str_sub(rownames(ind.lab.sup), 4, -1))
+      row.names(ind.lab.sup) <- 1:nrow(ind.lab.sup)
 ```
+
+```{r Cloud Variance Functions}
+   check.cloud.var <- function()
+
+```
+
 
 ```{r Data Examples}
    make.aff.plot <- function(x) {
