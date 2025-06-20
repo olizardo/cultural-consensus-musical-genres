@@ -43,7 +43,7 @@ Figure~\ref{fig:main} shows a heatmap plot of the proportion of respondents asso
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[trim={7cm 0cm 6cm 0cm},clip, width=0.9\textwidth]{Plots/main.png}
+    \includegraphics[trim={7cm 0cm 6cm 0cm},clip, width=0.6\textwidth]{Plots/main.png}
     \caption{Heatmap matrix of the proportion of respondents associating each one of fifteen social labels (columns) with one of twenty musical genre categories (rows).}
     \label{fig:main}
 \end{figure}
@@ -68,7 +68,7 @@ In the same way, the personal label projection is given by:
 Where $l^{(p)}_{kl}$ records the $p^{th}$ individual's perceived similarity between labels $k$ and $l$ based on their shared genres, and $l^{(p)}_{kk}$ records the number of times individual $p$ associates genre $i$ with a label. The structure of the data thus allows us to take a ``Mondo Breiger'' approach \citep{lee2018doorway-008}, where we can perform dual projections at the level of each individual. 
 
 \subsection*{Individual Backbone Extraction}
-Because each dual projection is likely to over-estimate the perceived similarities between genres and labels at the level of the individual, I use backbone extraction on each individual projection---more specifically, the disparity filter \citep{serrano2009extracting-084}---to isolate the most significant genre-to-genre and label-to-label associations for each individual \citep{neal2014backbone-b29}. 
+Because each dual projection is likely to over-estimate the perceived similarities between genres and labels at the level of the individual, I use backbone extraction on each individual-level projection---more specifically, the Stochastic Degree Sequence Model (SDSM)---to isolate the most significant genre-to-genre and label-to-label associations for each person \citep{neal2014backbone-b29}. 
 
 \begin{figure}[ht!]
     \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
