@@ -62,10 +62,10 @@ execute:
       }
    bb.sdsm <- function(x) {
      tryCatch({
-         w <- sdsm(x, alpha = 0.35, narrative = FALSE)
+         w <- round(sdsm(x, alpha = NULL, missing.as.zero = TRUE)$Pupper, 2)
          return(w)
             }, error = function(e) {return(NULL)})
-      }
+         }
    den <- rowSums(dat[,2:301])/300
    bad.den <- which(den > .9 | den < 0.1)
    dat2 <- dat[-c(bad.den), 2:301]
@@ -77,14 +77,20 @@ execute:
    ind.mat.t <- lapply(ind.mat, function(x) {t(x)})
    ind.row <- lapply(ind.mat, function(x) {x %*% t(x)}) # individual genre projection
    ind.col <- lapply(ind.mat, function(x) {t(x) %*% x}) # individual label projection
-   #row.bb <- lapply(ind.mat, bb.sdsm)
-   #col.bb <- lapply(ind.mat.t, bb.sdsm)
-   #null.rows <- which(as.numeric(unlist(lapply(row.bb, is.null))) == 1)
-   #null.cols <- which(as.numeric(unlist(lapply(col.bb, is.null))) == 1)
-   #row.bb <- row.bb[-null.rows]
-   #col.bb <- col.bb[-null.cols]
-   #save(row.bb, col.bb, file = "bb.RData")
+   # row.bb <- lapply(ind.mat, bb.sdsm)
+   # col.bb <- lapply(ind.mat.t, bb.sdsm)
+   # null.rows <- which(as.numeric(unlist(lapply(row.bb, is.null))) == 1)
+   # null.cols <- which(as.numeric(unlist(lapply(col.bb, is.null))) == 1)
+   # row.bb <- row.bb[-null.rows]
+   # col.bb <- col.bb[-null.cols]
+   # row.bb <- lapply(row.bb, function(x) {ifelse(is.nan(x), 1, x)})
+   # col.bb <- lapply(col.bb, function(x) {ifelse(is.nan(x), 1, x)})
+   # row.bb <- lapply(row.bb, function(x) {diag(x) <- 1; x})
+   # col.bb <- lapply(col.bb, function(x) {diag(x) <- 1; x})
+   # save(row.bb, col.bb, file = here("bb.RData"))
    load(here("bb.RData"))
+   row.bb <- lapply(row.bb, function(x) {(x < 0.45) * 1})
+   col.bb <- lapply(col.bb, function(x) {(x < 0.45) * 1})
    row.stack <- matrix(unlist(row.bb), ncol = 20, byrow = TRUE) # genre stacked matrix
    col.stack <- matrix(unlist(col.bb), ncol = 15, byrow = TRUE) # label stacked matrix
    colnames(row.stack) <- r # naming genre stacked matrix columns
@@ -95,6 +101,7 @@ execute:
    zero.rows.r <- which(rowSums(row.stack) == 0) # which genre stacked matrix rows sum to zero?
    zero.rows.c <- which(rowSums(col.stack) == 0) # which label stacked matrix rows sum to zero?
 ```
+
 
 ```{r Data Examples}
    make.aff.plot <- function(x) {
