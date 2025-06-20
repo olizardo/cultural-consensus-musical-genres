@@ -38,16 +38,128 @@ This paper applies insights derived from the relational, geometric, and schemati
 \section*{Data and Analytic Approach}
 To achieve these objectives, I analyze a comprehensive dataset on cultural tastes, collected in the Summer of 2012 from a weighted representative sample of Americans (N = 2,250) \citep{lizardo2016cultural-aaa, lizardo2015musical-8c6, lizardo2024from-ddd}. This dataset, similar to the GSS 1993 survey, includes items assessing respondents' likes, dislikes, and frequency of consumption across twenty distinct musical style categories. Crucially, this dataset incorporates a \textit{perceptual} module that prompted respondents to identify characteristics describing the typical fans of each genre category, allowing them to select all applicable traits from a predefined list of socio-demographic labels (e.g., Male, Female, Young, College Educated, Asian, Black, Hispanic, White, and various social classes). 
 
-\begin{table}
-    \caption{.}
-    \centering
-    \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Tabs/zinf-reg.png}
-    \label{tab:zinf}
-\end{table}
+\subsection*{Averaged Genre Associations}
+Figure~\ref{fig:main} shows a heatmap plot of the proportion of respondents associating each genre with each of the fifteen social labels included in the survey, reproducing one of the key results from \citet[Table 3]{lizardo2016cultural-aaa}. As we can see, respondents use social labels associated with gender fairly indiscriminately, associating it with each genre at a fairly high rate. Racial categories are used in a more discriminating manner, reproducing (on the average) standard stereotypes of genre audiences. Rock and traditional ``highbrow'' genre categories are associated with white audiences, Rap, Blues, R\&B, Reggae, and Gospel with Black audiences, and Latin music with Hispanic audiences. The category of Asian is not strongly associated with any genre. Both age and class/education categories also reproduce expected stereotypes. For instance, ,Rap and Metal are considered ``young'' genres, while Classic Rock and Country are thought of as ```middle aged.'' In the same way, Classical and Opera audiences are considered educated and Upper Class, while Bluegrass and Country audiences are considered not college educated and working or lower class). 
 
-Our methodological approach treats this rich association data as cognitive two-mode data, conceptually analogous to Krackhardt-style data used in one-mode networks \citep{batchelder1997consensus-f5c, kumbasar1994systematic-213}, where each person provides their perceived associations between musical genres and social labels. I use relational techniques, including Dual Projection and Backbone extraction \citep{everett2013dual-projection-c89, neal2014backbone-b29}, to distill and isolate the most significant perceived associations from the raw data. Subsequently, the backbone of these person-specific projected networks is jointly modeled using Stacked Correspondence Analysis and Geometric Data Analysis \citep{roux2004geometric-65c}. 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[trim={7cm 0cm 6cm 0cm},clip, width=0.9\textwidth]{Plots/main.png}
+    \caption{Heatmap matrix of the proportion of respondents associating each one of fifteen social labels (columns) with one of twenty musical genre categories (rows).}
+    \label{fig:main}
+\end{figure}
+
+\subsection*{Cognitive Two Mode Networks}
+The data used to construct Figure ~\ref{fig:main} consists of averages of more than two thousand binary matrices---one for each respondent---of the same dimensions as~\ref{fig:main} provided by each respondent. As such, the averaging hides as much as it reveals, even as it produced intuitive results. The methodological approach taken here treats this rich disaggregated association data as cognitive two-mode data, conceptually analogous to Krackhardt-style data used in one-mode networks \citep{batchelder1997consensus-f5c, kumbasar1994systematic-213}, where each person provides their perceived associations between musical genres and social labels. In terms of recent work in measuring culture, each individual two-mode data table records the (explicit) schematic structure of the way individuals perceive each genre category relative to the set of social labels \citep{hunzaker2019mapping-280}.
+
+More formally, each individual provides a ``personal'' two mode network of genres by social labels with corresponding affiliation matrix $\mathbf{A}(p)$, where $a^{(p)}_{gl} = 1$ if individual $p$ associates genre $g$ with label $l$. Following \citet{breiger1974duality-1d0}, the personal genre projection is given by:
+
+\begin{equation}
+   \mathbf{G}(p) = \mathbf{A}(p)\mathbf{A}(p)^T 
+\end{equation}
+
+Where $g^{(p)}_{ij}$ records the $p^{th}$ individual's perceived similarity between genres $i$ and $j$ based on their shared labels and $g^{(p)}_{ii}$ records the number of times individual $p$ associates genre $i$ with a label.
+
+In the same way, the personal label projection is given by:
+
+\begin{equation}
+    \mathbf{L}(p) = \mathbf{A}(p)^T\mathbf{A}(p)
+\end{equation}
+ 
+Where $l^{(p)}_{kl}$ records the $p^{th}$ individual's perceived similarity between labels $k$ and $l$ based on their shared genres, and $l^{(p)}_{kk}$ records the number of times individual $p$ associates genre $i$ with a label. The structure of the data thus allows us to take a ``Mondo Breiger'' approach \citep{lee2018doorway-008}, where we can perform dual projections at the level of each individual. 
+
+\subsection*{Individual Backbone Extraction}
+Because each dual projection is likely to over-estimate the perceived similarities between genres and labels at the level of the individual, I use backbone extraction on each individual projection---more specifically, the disparity filter \citep{serrano2009extracting-084}---to isolate the most significant genre-to-genre and label-to-label associations for each individual \citep{neal2014backbone-b29}. 
+
+\begin{figure}[ht!]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={4cm 0cm 3cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-af1.png}
+            \caption{Case ID: 65}
+            \label{fig:ind-ex-aff1}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={4cm 0cm 3cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-af2.png}
+            \caption{Case ID: 236}
+            \label{fig:ind-ex-aff2}
+    \end{subfigure}
+    \caption{Individual affiliation matrices of the association between musical genres and social labels.}
+    \label{fig:ind-ex-aff}
+\end{figure}
+
+For instance, Figure~\ref{fig:ind-ex-aff} shows the cognitive two-mode network matrices of the associations between genres and social labels for two individuals in the data. It is clear from this example that the averaged associations shown in Figure~\ref{fig:main} hide quite a lof of individual variation and idiosyncratic perceptions. 
+
+\begin{figure}[ht!]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-rp1.png}
+            \caption{Case ID: 65}
+            \label{fig:ind-ex-rp1}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-rp2.png}
+            \caption{Case ID: 236}
+            \label{fig:ind-ex-rp2}
+    \end{subfigure}
+    \caption{Individual genre projection matrices.}
+    \label{fig:ind-ex-rp}
+\end{figure}
+
+\begin{figure}[ht!]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-cp1.png}
+            \caption{Case ID: 65}
+            \label{fig:ind-ex-cp1}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-cp2.png}
+            \caption{Case ID: 236}
+            \label{fig:ind-ex-cp2}
+    \end{subfigure}
+    \caption{Individual label projection matrices.}
+    \label{fig:ind-ex-cp}
+\end{figure}
+
+Figures~\ref{fig:ind-ex-rp} and~\ref{fig:ind-ex-cp} show the corresponding row ($\mathbf{G}(p)$) and column ($\mathbf{L}(p)$) projections for the same two individuals, while Figures~\ref{fig:ind-ex-rbb} and~\ref{fig:ind-ex-cbb} show the respective backbones of each projection for the same cases. As we can see the procedure extract distinct sets of significant associations between genres and labels for this two cases. 
+
+\begin{figure}[ht!]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-rbb1.png}
+            \caption{Case ID: 65}
+            \label{fig:ind-ex-rbb1}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-rbb2.png}
+            \caption{Case ID: 236}
+            \label{fig:ind-ex-rbb2}
+    \end{subfigure}
+    \caption{Individual genre backbones.}
+    \label{fig:ind-ex-rbb}
+\end{figure}
 
 This analytical framework generates three sets of scores: person-specific judgments of the relative similarity of genres and labels (row scores), aggregate judgments of genre and label similarity (column scores), and supplementary scores for genres and labels representing the centroid of the cloud of person-specific judgments. Ultimately, this allows me to examine heterogeneity in folk understandings by observing how multiple clouds of individuals (projected into both genre and social label spaces) distribute themselves along principal axes, providing critical insights into the variation in meaning consensus across different levels of analysis.
+
+\begin{figure}[ht!]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-cbb1.png}
+            \caption{Case ID: 65}
+            \label{fig:ind-ex-cbb1}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-cbb2.png}
+            \caption{Case ID: 236}
+            \label{fig:ind-ex-cbb2}
+    \end{subfigure}
+    \caption{Individual label backbones.}
+    \label{fig:ind-ex-cbb}
+\end{figure}
 
 \section*{Workflow Illustration}
 
