@@ -55,7 +55,6 @@ execute:
    dev.off()
 ```
 
-
 ```{r Creating individual matrices}
    make.mat <- function(x) {
       x <- matrix(as.numeric(x), 20, 15, byrow = TRUE)
@@ -63,7 +62,7 @@ execute:
       }
    bb.sdsm <- function(x) {
      tryCatch({
-         w <- sdsm(x, alpha = 0.25, narrative = FALSE)
+         w <- sdsm(x, alpha = 0.35, narrative = FALSE)
          return(w)
             }, error = function(e) {return(NULL)})
       }
@@ -76,12 +75,16 @@ execute:
    ind.mat <- lapply(ind.mat, function(x) {colnames(x) <- c; x}) # naming individual columns
    names(ind.mat) <- dat$id_char[-c(bad.den)]
    ind.mat.t <- lapply(ind.mat, function(x) {t(x)})
-   row.bb <- lapply(ind.mat, bb.sdsm)
-   col.bb <- lapply(ind.mat.t, bb.sdsm)
-   null.rows <- which(as.numeric(unlist(lapply(row.bb, is.null))) == 1)
-   null.cols <- which(as.numeric(unlist(lapply(col.bb, is.null))) == 1)
-   row.bb <- row.bb[-null.rows]
-   col.bb <- col.bb[-null.cols]
+   ind.row <- lapply(ind.mat, function(x) {x %*% t(x)}) # individual genre projection
+   ind.col <- lapply(ind.mat, function(x) {t(x) %*% x}) # individual label projection
+   #row.bb <- lapply(ind.mat, bb.sdsm)
+   #col.bb <- lapply(ind.mat.t, bb.sdsm)
+   #null.rows <- which(as.numeric(unlist(lapply(row.bb, is.null))) == 1)
+   #null.cols <- which(as.numeric(unlist(lapply(col.bb, is.null))) == 1)
+   #row.bb <- row.bb[-null.rows]
+   #col.bb <- col.bb[-null.cols]
+   #save(row.bb, col.bb, file = "bb.RData")
+   load(here("bb.RData"))
    row.stack <- matrix(unlist(row.bb), ncol = 20, byrow = TRUE) # genre stacked matrix
    col.stack <- matrix(unlist(col.bb), ncol = 15, byrow = TRUE) # label stacked matrix
    colnames(row.stack) <- r # naming genre stacked matrix columns
@@ -91,6 +94,57 @@ execute:
    rownames(col.stack) <- rep(c, m) # naming label stacked matrix rows
    zero.rows.r <- which(rowSums(row.stack) == 0) # which genre stacked matrix rows sum to zero?
    zero.rows.c <- which(rowSums(col.stack) == 0) # which label stacked matrix rows sum to zero?
+```
+
+```{r Data Examples}
+   make.aff.plot <- function(x) {
+      p <- corrplot(x, is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n",
+         number.cex = 1.75, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("white","white","red"))(200))
+      return(p)
+      }
+   make.proj.plot <- function(x) {
+     p <- corrplot(x, is.corr = FALSE, method = "color", 
+         tl.col = "black", tl.cex = 1, tl.srt = 45,
+         addCoef.col = "black", cl.pos = "n", cl.lim = c(0, max(x)),
+         number.cex = 1.5, number.digits = 0, addgrid.col = "darkgray",
+         col=colorRampPalette(c("lightblue","pink","red"))(200))
+         return(p)
+         }
+   k = 1
+   for (id in c("id_65", "id_236", "id_1114", "id_2002")) {
+      plot.name <- paste(paste("data-ex-af", k, sep = ""), ".png", sep = "")
+      png(file = here("Plots", plot.name), width=800, height=700)
+      make.aff.plot(ind.mat[[id]])
+      dev.off()
+      plot.name <- paste(paste("data-ex-rp", k, sep = ""), ".png", sep = "")
+      png(file = here("Plots", plot.name), width=800, height=700)
+      make.proj.plot(ind.row[[id]])
+      dev.off()
+      plot.name <- paste(paste("data-ex-cp", k, sep = ""), ".png", sep = "")
+      png(file = here("Plots", plot.name), width=800, height=700)
+      make.proj.plot(ind.col[[id]])
+      dev.off()
+      plot.name <- paste(paste("data-ex-rbb", k, sep = ""), ".png", sep = "")
+      png(file = here("Plots", plot.name), width=800, height=700)
+      make.aff.plot(row.bb[[id]])
+      dev.off()
+      plot.name <- paste(paste("data-ex-cbb", k, sep = ""), ".png", sep = "")
+      png(file = here("Plots", plot.name), width=800, height=700)
+      make.aff.plot(col.bb[[id]])
+      dev.off()
+      k <- k + 1
+      }
+   a <- rbind(row.bb[["id_65"]], row.bb[["id_236"]])
+   b <- rbind(col.bb[["id_65"]], col.bb[["id_236"]])
+   png(file = here("Plots", "data-ex-stack1.png"), width=800, height=1000)
+   make.aff.plot(a)
+   dev.off()
+   png(file = here("Plots", "data-ex-stack2.png"), width=800, height=1000)
+   make.aff.plot(b)
+   dev.off()
 ```
 
 ```{r Stacked CA}
@@ -160,58 +214,6 @@ execute:
       row.names(ind.lab.sup) <- 1:nrow(ind.lab.sup)
 ```
 
-
-```{r Data Examples}
-   make.aff.plot <- function(x) {
-      p <- corrplot(x, is.corr = FALSE, method = "color", 
-         tl.col = "black", tl.cex = 1, tl.srt = 45,
-         addCoef.col = "black", cl.pos = "n",
-         number.cex = 1.75, number.digits = 0, addgrid.col = "darkgray",
-         col=colorRampPalette(c("white","white","red"))(200))
-      return(p)
-      }
-   make.proj.plot <- function(x) {
-     p <- corrplot(x, is.corr = FALSE, method = "color", 
-         tl.col = "black", tl.cex = 1, tl.srt = 45,
-         addCoef.col = "black", cl.pos = "n", cl.lim = c(0, max(x)),
-         number.cex = 1.5, number.digits = 0, addgrid.col = "darkgray",
-         col=colorRampPalette(c("lightblue","pink","red"))(200))
-         return(p)
-         }
-   k = 1
-   for (id in c("id_65", "id_236", "id_1114", "id_2002")) {
-      plot.name <- paste(paste("data-ex-af", k, sep = ""), ".png", sep = "")
-      png(file = here("Plots", plot.name), width=800, height=700)
-      make.aff.plot(ind.mat[[id]])
-      dev.off()
-      plot.name <- paste(paste("data-ex-rp", k, sep = ""), ".png", sep = "")
-      png(file = here("Plots", plot.name), width=800, height=700)
-      make.proj.plot(ind.row[[id]])
-      dev.off()
-      plot.name <- paste(paste("data-ex-cp", k, sep = ""), ".png", sep = "")
-      png(file = here("Plots", plot.name), width=800, height=700)
-      make.proj.plot(ind.col[[id]])
-      dev.off()
-      plot.name <- paste(paste("data-ex-rbb", k, sep = ""), ".png", sep = "")
-      png(file = here("Plots", plot.name), width=800, height=700)
-      make.aff.plot(row.bb[[id]])
-      dev.off()
-      plot.name <- paste(paste("data-ex-cbb", k, sep = ""), ".png", sep = "")
-      png(file = here("Plots", plot.name), width=800, height=700)
-      make.aff.plot(col.bb[[id]])
-      dev.off()
-      k <- k + 1
-      }
-   a <- rbind(row.bb[["id_65"]], row.bb[["id_236"]])
-   b <- rbind(col.bb[["id_65"]], col.bb[["id_236"]])
-   png(file = here("Plots", "data-ex-stack1.png"), width=800, height=1000)
-   make.aff.plot(a)
-   dev.off()
-   png(file = here("Plots", "data-ex-stack2.png"), width=800, height=1000)
-   make.aff.plot(b)
-   dev.off()
-```
-
 ```{r Column Score Similarity Plots}
    make.col.plot <- function(x, d1, d2)  {
       p <- fviz_ca_col(x, axes = c(d1, d2),  
@@ -248,44 +250,44 @@ execute:
    w <- 750
    png(file = here("Plots", "genre-proto-ex1.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat, 
-                     seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 3, b = 3, l = 2, r = 3,
+                     seed = 125, ls = 5, 
+                     1, 2, pa = .35,  t = 3, b = 3, l = 2, r = 3, bns = 6,
                      c("Rap", "Folk", "Classical"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex2.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 6,
                      c("Alt_Rock", "Gospel", "Opera"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex3.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 5,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 6,
                      c("Metal", "Bluegrass", "Broadway"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex4.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 4,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3.25, bns = 6,
                      c("Jazz", "Reggae", "Blues", "Rap", "Classical"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex5.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 4,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 6,
                      c("Country", "Bluegrass", "Classic_Rock", "Folk"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex6.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 4,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 6,
                      c("Alt_Rock", "Contemp_Rock", "Classic_Rock", "Metal"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex7.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 4,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 6,
                      c("Broadway", "Classical", "Opera", "Easy", "Jazz"))
    dev.off()
 ```
