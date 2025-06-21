@@ -205,7 +205,7 @@ Figure~\ref{fig:ca-label-biplot12} shows the corresponding consensus biplot for 
 
 Figure~\ref{fig:ca-label-biplot13} shows the same biplot as Figure~\ref{fig:ca-label-biplot12} but with the third dimension scores on the vertical axis. We can see that the third dimension separates the gender labels (which are perceived by people to be similar to the racial labels of ``white" and ``middle-aged") from the rest, positioning them at the bottom of the plot. 
 \subsection*{Fuzzy Biplots for Genres}
-While the consensus scores provide insightful information of the way that persons classify genres and labels \textit{on average}, as we noted at the outset, this hides as much as it reveals. For each of the genres and labels shown in the previous figure is actually a \textit{distribution} (a ``cloud'' of points in GDA parlance) of the audiences pertaining to each genre. The patterning of this distribution can be seen by plotting the clouds instead of the single consensus score in a CA biplot. 
+While the consensus scores provide insightful information of the way that persons classify genres and labels \textit{on average}, as we noted at the outset, this hides as much as it reveals. For each of the genres and labels shown in the previous figure is actually a \textit{distribution} (a ``cloud'' of points in GDA parlance) of the audiences pertaining to each genre. The patterning of this distribution can be seen by plotting the \textit{clouds} instead of the single consensus score in a CA biplot. 
 
 \begin{figure}[t]
     \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
@@ -213,39 +213,66 @@ While the consensus scores provide insightful information of the way that person
      \begin{subfigure}[b]{0.49\textwidth}
         \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex1.png}
             \caption{}
-            \label{fig:}
+            \label{fig:genre-fuzz-a}
     \end{subfigure}
      \begin{subfigure}[b]{0.49\textwidth}
         \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex2.png}
             \caption{}
-            \label{fig:}
+            \label{fig:genre-fuzz-b}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex3.png}
+            \caption{}
+            \label{fig:genre-fuzz-c}
     \end{subfigure}
      \begin{subfigure}[b]{0.49\textwidth}
         \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex4.png}
             \caption{}
-            \label{fig:}
-    \end{subfigure}
-     \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex7.png}
-            \caption{}
-            \label{fig:}
+            \label{fig:genre-fuzz-d}
     \end{subfigure}
      \begin{subfigure}[b]{0.49\textwidth}
         \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex5.png}
             \caption{}
-            \label{fig:}
+            \label{fig:genre-fuzz-e}
     \end{subfigure}
      \begin{subfigure}[b]{0.49\textwidth}
         \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex7.png}
             \caption{}
-            \label{fig:}
+            \label{fig:genre-fuzz-f}
     \end{subfigure}
-    \caption{.}
-    \label{fig:}
+    \caption{Fuzzy biplots of musical genres.}
+    \label{fig:genre-fuzz}
 \end{figure}
 
-
+Figure~\ref{fig:genre-fuzz} shows a series of such fuzzy biplots for selected genres. Each figure presents a two-dimensional density plot, with each cloud of points marked by a different color, and with darker shading corresponding to the densest regions of the plot for each cloud. As we can see in Figures~\ref{fig:genre-fuzz-a}-\ref{fig:genre-fuzz-c}, genres belonging to the three main clusters distributions in Figure~\ref{fig:ca-genre-biplot12} show up as fuzzy clouds of points that, while partially overlapping, exhibit strong separation. Meanwhile, as shown in Figures~\ref{fig:genre-fuzz-d}-\ref{fig:genre-fuzz-f}, when we plot clouds of points corresponding to genres in the same general cluster (like Rap, Reggae and blues, or Classic Rock, Country, and Folk, or Classical, Opera, and Broadway Musicals), we end up with strongly overlapping clouds. Some genres, such as Jazz in Figures~\ref{fig:genre-fuzz-d} and~\ref{fig:genre-fuzz-e}, occupy bridging positions, nearer the center of the plot and overlapping with otherwise distinct clusters of genres. This position of Jazz in the popular imagination corresponds to the historical trajectory of the genre in the field of production in the United States, which combined folk, popular, and classical music practices \citep{lopes1999diffusion-1fa}.
 \subsection*{Fuzzy Biplots for Labels}
+
+\begin{figure}[t]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/label-proto-ex1.png}
+            \caption{}
+            \label{fig:label-fuzz-a}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/label-proto-ex2.png}
+            \caption{}
+            \label{fig:label-fuzz-b}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/label-proto-ex3.png}
+            \caption{}
+            \label{fig:label-fuzz-c}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/label-proto-ex4.png}
+            \caption{}
+            \label{fig:label-fuzz-d}
+    \end{subfigure}
+    \caption{Fuzzy biplots of selected social labels.}
+    \label{fig:label-fuzz}
+\end{figure}
 
 \section*{Discussion and Conclusions}
 
