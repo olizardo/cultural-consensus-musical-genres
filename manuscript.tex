@@ -70,7 +70,7 @@ Where $l^{(p)}_{kl}$ records the $p^{th}$ individual's perceived similarity betw
 \subsection*{Individual Backbone Extraction}
 Because each dual projection is likely to over-estimate the perceived similarities between genres and labels at the level of the individual, I use backbone extraction on each individual-level projection---more specifically, the Stochastic Degree Sequence Model (SDSM)---to isolate the most significant genre-to-genre and label-to-label associations for each person \citep{neal2014backbone-b29}. 
 
-The SDSM works as follows: In the first step, a generalized linear model for binary outcomes is used to predict the probability of a tie between each genre and label in the two-mode network, using the number of times a genre was associated with social label and the number of times a social label was associated with a genre (the degrees of the nodes in each mode) and their interaction as predictors. From the predicted probabilities derived from this model (where the unit of analysis is the genre/label pair), we create an ensemble of two-mode networks, generate genre-to-genre and label-to-label projections for each, and compute the percentage of times that the projected edge weight between pairs of genres and pairs of labels is smaller than that observed in the original network. We then create a binary link between two genres and two labels (indicating perceived similarity) if this percentage falls below a certain threshold. In these data, the usual $p < 0.05$ criterion proves to be too strong (generating mostly empty backbones) for each genre-to-genre and label-to-label projection. Accordingly, I use a less stringent criterion of $p < 0.45$.  
+The SDSM works as follows: In the first step, a generalized linear model for binary outcomes is used to predict the probability of a tie between each genre and label in the two-mode network, using the number of times a genre was associated with social label and the number of times a social label was associated with a genre (the degrees of the nodes in each mode) and their interaction as predictors. From the predicted probabilities derived from this model (where the unit of analysis is the genre/label pair), we create an ensemble of two-mode networks, generate genre-to-genre and label-to-label projections for each, and compute the proportion of times that the projected edge weight between pairs of genres and pairs of labels is smaller in the generated projection ensemble than that observed in the original network projection. We then assign a binary link between two genres and two labels in the corresponding backbone (indicating perceived similarity) if this percentage falls below a certain threshold. In these data, the usual $p < 0.05$ criterion proves to be too strong (generating mostly empty backbones) for each genre-to-genre and label-to-label projection. Accordingly, I use a less stringent criterion of $p < 0.45$.  
 
 \begin{figure}[ht!]
     \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
@@ -89,7 +89,7 @@ The SDSM works as follows: In the first step, a generalized linear model for bin
     \label{fig:ind-ex-aff}
 \end{figure}
 
-For instance, Figure~\ref{fig:ind-ex-aff} shows the cognitive two-mode network matrices of the associations between genres and social labels for two individuals in the data. It is clear from this example that the averaged associations shown in Figure~\ref{fig:main} hide quite a lof of individual variation and idiosyncratic perceptions. 
+Figure~\ref{fig:ind-ex-aff} shows the cognitive two-mode network matrices of the associations between genres and social labels for two individuals in the data. It is clear from this example that the averaged associations shown in Figure~\ref{fig:main} hide quite a lot of individual variation and idiosyncratic perceptions. For instance, Case ID 65 believes that Heavy Metal encompasses most types of people, regardless of gender and race (excluding Asians), but thinks that Jazz music only appeals to older white or Hispanic people with a college degree. Case ID 236, on the other hand, thinks that Metal fans are mostly young white men without a college degree, but the classical appeals to most people regardless of gender, race, and age.  
 
 \begin{figure}[ht!]
     \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
@@ -104,9 +104,22 @@ For instance, Figure~\ref{fig:ind-ex-aff} shows the cognitive two-mode network m
             \caption{Case ID: 236}
             \label{fig:ind-ex-rp2}
     \end{subfigure}
-    \caption{Individual genre projection matrices.}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-rbb1.png}
+            \caption{Case ID: 65}
+            \label{fig:ind-ex-rbb1}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-rbb2.png}
+            \caption{Case ID: 236}
+            \label{fig:ind-ex-rbb2}
+    \end{subfigure}
+    \caption{Individual genre backbones.}
+    \caption{Individual genre projection matrices and corresponding backbones.}
     \label{fig:ind-ex-rp}
 \end{figure}
+
+Figure~\ref{fig:ind-ex-rp} shows the individual row projections ($\mathbf{G}(p)$) and corresponding backbones for each of these two cases, encoding the perceived similarities between genres and social labels for each individual. We can see, for instance, that in accordance with their cognitive two-mode network, which sees the Metal audience as relatively undifferentiated, Case ID 65 does not strongly associate Metal with any other genre, except contemporary rock. In the same way, Case ID 236 sees Classical and Opera as strongly linked, and Metal as most similar to such genres as Reggae, Rap, Alt Rock, and Contemporary Rock. The corresponding column projections ($\mathbf{L}(p)$) and backbones for these two cases are shown in Figure~\ref{fig:ind-ex-cp}. Both individuals associate white people with a college degree; Case ID 65 sees the label ``Working Class'' as most similar to ``Black'' and ``Young,'' but Case ID 263 sees the same label as most similar to ``Hispanic," ``Asian,'' and people without a college education. 
 
 \begin{figure}[ht!]
     \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
@@ -121,34 +134,6 @@ For instance, Figure~\ref{fig:ind-ex-aff} shows the cognitive two-mode network m
             \caption{Case ID: 236}
             \label{fig:ind-ex-cp2}
     \end{subfigure}
-    \caption{Individual label projection matrices.}
-    \label{fig:ind-ex-cp}
-\end{figure}
-
-Figures~\ref{fig:ind-ex-rp} and~\ref{fig:ind-ex-cp} show the corresponding row ($\mathbf{G}(p)$) and column ($\mathbf{L}(p)$) projections for the same two individuals, while Figures~\ref{fig:ind-ex-rbb} and~\ref{fig:ind-ex-cbb} show the respective backbones of each projection for the same cases. As we can see the procedure extract distinct sets of significant associations between genres and labels for this two cases. 
-
-\begin{figure}[ht!]
-    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
-    \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-rbb1.png}
-            \caption{Case ID: 65}
-            \label{fig:ind-ex-rbb1}
-    \end{subfigure}
-     \begin{subfigure}[b]{0.49\textwidth}
-        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-rbb2.png}
-            \caption{Case ID: 236}
-            \label{fig:ind-ex-rbb2}
-    \end{subfigure}
-    \caption{Individual genre backbones.}
-    \label{fig:ind-ex-rbb}
-\end{figure}
-
-This analytical framework generates three sets of scores: person-specific judgments of the relative similarity of genres and labels (row scores), aggregate judgments of genre and label similarity (column scores), and supplementary scores for genres and labels representing the centroid of the cloud of person-specific judgments. Ultimately, this allows me to examine heterogeneity in folk understandings by observing how multiple clouds of individuals (projected into both genre and social label spaces) distribute themselves along principal axes, providing critical insights into the variation in meaning consensus across different levels of analysis.
-
-\begin{figure}[ht!]
-    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
-    \centering
      \begin{subfigure}[b]{0.49\textwidth}
         \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/data-ex-cbb1.png}
             \caption{Case ID: 65}
@@ -159,11 +144,24 @@ This analytical framework generates three sets of scores: person-specific judgme
             \caption{Case ID: 236}
             \label{fig:ind-ex-cbb2}
     \end{subfigure}
-    \caption{Individual label backbones.}
-    \label{fig:ind-ex-cbb}
+    \caption{Individual label projection matrices and corresponding backbones.}
+    \label{fig:ind-ex-cp}
 \end{figure}
 
 \section*{Workflow Illustration}
+Once we have computed the genre and label projection backbones for each individual in the survey, we stack these matrices, generating two tables of dimensions $(N \times 20) \times 20$ (for genres) and $(N \times 15) \times 20$ (for labels). We applied the subject of each of these to Correspondence Analysis (CA) to obtain consensus (column) scores of the similarity between genres and labels, along with individual perceptions of the placement of each genre and label in the same spaces (row scores) \citep{kumbasar1994systematic-213}. These scores are then analyzed using Geometric Data Analytic methods \citep{rouanet2000geometric-a44}.
+
+\begin{figure}[ht!]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{mondo-workflow.png}
+    \caption{Individual label projection matrices and corresponding backbones.}
+    \label{fig:ind-ex-cp}
+\end{figure}
+
+
+This analytical framework thus generates three sets of scores: person-specific judgments of the relative similarity of genres and labels (row scores), aggregate judgments of genre and label similarity (column scores), and supplementary scores for genres and labels representing the centroid of the cloud of person-specific judgments. Ultimately, this allows me to examine heterogeneity in folk understandings by observing how multiple clouds of individuals (projected into both genre and social label spaces) distribute themselves along principal axes, providing critical insights into the variation in meaning consensus across different levels of analysis. The resulting data workflow is shown in Figure
+
 
 \section*{Results}
 
