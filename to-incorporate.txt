@@ -1,0 +1,385 @@
+
+```{r Genre and Label Subcloud Variance}
+   w <- 800
+   h <- 800
+   make.var.dat <- function(x, w) {
+      z <- make.ridge.dat(x, w) %>% 
+      mutate(dist.cent.1 = (Dim.1 - Prot.1)^2) %>% 
+      mutate(dist.cent.2 = (Dim.2 - Prot.2)^2) %>% 
+      mutate(dist.cent.3 = (Dim.3 - Prot.3)^2) %>% 
+      mutate(var = dist.cent.1 + dist.cent.2 + dist.cent.3) %>% 
+      mutate(std = sqrt(var)) %>% 
+      select(c("var", "std", "col.obj")) %>% 
+      group_by(col.obj) %>% 
+      summarize(across(c(var), mean))
+      return(z)
+      }
+   make.var.plot <- function(w, ps = 8, seed = 125) {
+      p <- ggplot(data = w, aes(y = reorder(col.obj, var), 
+                                x = var, color = col.obj, group = col.obj))
+      p <- p + geom_point(stat = "identity", size = 8)
+      p <- p + scale_color_manual(values = cols)
+      p <- p + guides(color = "none")
+      p <- p + theme_ridges() + labs(y = "", x = "")
+      p <- p + theme(axis.text = element_text(size = 20))
+      set.seed(seed)
+      colors <- sample(cols, length(unique(w$col.obj)))
+      p <- p + scale_color_manual(values = colors)
+      p <- p + scale_fill_manual(values = colors)
+      p
+   }   
+   make.var.plot.demog <- function(w, ps = 8, seed = 125) {
+      p <- ggplot(data = w, aes(y = col.obj, 
+                                x = var, color = col.obj, group = col.obj))
+      p <- p + geom_point(stat = "identity", size = 8)
+      p <- p + scale_color_manual(values = cols)
+      p <- p + guides(color = "none")
+      p <- p + theme_ridges() + labs(y = "", x = "")
+      p <- p + theme(axis.text = element_text(size = 20))
+      set.seed(seed)
+      colors <- sample(cols, length(unique(w$col.obj)))
+      p <- p + scale_color_manual(values = colors)
+      p <- p + scale_fill_manual(values = colors)
+      p
+      } 
+   var.g <- make.var.dat(sup.gen.dat, row.gen.dat) 
+   var.l <- make.var.dat(sup.lab.dat, row.lab.dat) 
+   png(file = here("Plots", "genre-var.png"), width=w, height=h)
+   make.var.plot(var.g, ps = 10) + xlim(0.75, 1.75)
+   dev.off()
+   png(file = here("Plots", "label-var.png"), width=w, height=h)
+   make.var.plot(var.l, ps = 10) + xlim(0.75, 1.75)
+   dev.off()
+```
+
+```{r skew and kurtosis data}
+   library(moments)
+   dat <- c()
+   for (g in sup.gen.dat$col.obj) {
+      d <- filter(row.gen.dat, col.obj == g) %>% 
+         select(Dim.1) 
+      s <- round(skewness(d), 4)
+      k <- round(kurtosis(d), 4)
+      b <- round((s^2+1)/k, 4)
+      dat <- rbind(dat, c(s, k, b))
+      }
+   dat.g1 <- data.frame(sup.gen.dat$col.obj, dat) %>% 
+      rename(col.obj = sup.gen.dat.col.obj, skew = Dim.1, kurt = Dim.1.1, bm = Dim.1.2) %>% 
+      mutate(kurt = kurt - 3)
+   dat <- c()
+   for (g in sup.gen.dat$col.obj) {
+      d <- filter(row.gen.dat, col.obj == g) %>% 
+         select(Dim.2) 
+      s <- round(skewness(d), 4)
+      k <- round(kurtosis(d), 4)
+      b <- round((s^2+1)/k, 4)
+      dat <- rbind(dat, c(s, k, b))
+      }
+   dat.g2 <- data.frame(sup.gen.dat$col.obj, dat) %>% 
+      rename(col.obj = sup.gen.dat.col.obj, skew = Dim.2, kurt = Dim.2.1, bm = Dim.2.2) %>% 
+      mutate(kurt = kurt - 3)
+   dat <- c()
+   for (l in sup.lab.dat$col.obj) {
+      d <- filter(row.lab.dat, col.obj == l) %>% 
+         select(Dim.1) 
+      s <- round(skewness(d), 4)
+      k <- round(kurtosis(d), 4)
+      b <- round((s^2+1)/k, 4)
+      dat <- rbind(dat, c(s, k, b))
+      }
+   dat.l1 <- data.frame(sup.lab.dat$col.obj, dat) %>% 
+      rename(col.obj = sup.lab.dat.col.obj, skew = Dim.1, kurt = Dim.1.1, bm = Dim.1.2) %>% 
+      mutate(kurt = kurt - 3)
+   dat <- c()
+   for (l in sup.lab.dat$col.obj) {
+      d <- filter(row.lab.dat, col.obj == l) %>% 
+         select(Dim.2) 
+      s <- round(skewness(d), 4)
+      k <- round(kurtosis(d), 4)
+      b <- round((s^2+1)/k, 4)
+      dat <- rbind(dat, c(s, k, b))
+      }
+   dat.l2 <- data.frame(sup.lab.dat$col.obj, dat) %>% 
+      rename(col.obj = sup.lab.dat.col.obj, skew = Dim.2, kurt = Dim.2.1, bm = Dim.2.2) %>% 
+      mutate(kurt = kurt - 3)
+```
+
+```{r skew and kurtosis plots}
+   #gennres
+   png(file = here("Plots", "genre-skew1.png"), width=w, height=h)
+   d <- dat.g1 %>% 
+      rename(var = skew)
+   make.var.plot(d) 
+   dev.off()
+   png(file = here("Plots", "genre-skew2.png"), width=w, height=h)
+   d <- dat.g2 %>% 
+      rename(var = skew)
+   make.var.plot(d) 
+   dev.off()
+   png(file = here("Plots", "genre-kurt1.png"), width=w, height=h)
+   d <- dat.g1 %>% 
+      rename(var = kurt)
+   make.var.plot(d)    
+   dev.off()
+   png(file = here("Plots", "genre-kurt2.png"), width=w, height=h)
+   d <- dat.g2 %>% 
+      rename(var = kurt)
+   make.var.plot(d) 
+   dev.off()
+   #labels
+   png(file = here("Plots", "label-skew1.png"), width=w, height=h)
+   d <- dat.l1 %>% 
+      rename(var = skew)
+   make.var.plot(d) 
+   dev.off()
+   png(file = here("Plots", "label-skew2.png"), width=w, height=h)
+   d <- dat.l2 %>% 
+      rename(var = skew)
+   make.var.plot(d) 
+   dev.off()
+   png(file = here("Plots", "label-kurt1.png"), width=w, height=h)
+   d <- dat.l1 %>% 
+      rename(var = kurt)
+   make.var.plot(d)    
+   dev.off()
+   png(file = here("Plots", "label-kurt2.png"), width=w, height=h)
+   d <- dat.l2 %>% 
+      rename(var = kurt)
+   make.var.plot(d) 
+   dev.off()
+```
+
+```{r Comparing Individual Matrices Based on Typicality}
+   library(stringr)
+   w <- 800
+   h <- 700
+   make.var.row.dat  <- function(x, w) {
+      z <- make.ridge.dat(x, w) %>% 
+      mutate(dist.cent.1 = (Dim.1 - Prot.1)^2) %>% 
+      mutate(dist.cent.2 = (Dim.2 - Prot.2)^2) %>% 
+      mutate(dist.cent.3 = (Dim.3 - Prot.3)^2) %>% 
+      mutate(var = dist.cent.1 + dist.cent.2 + dist.cent.3) %>% 
+      mutate(std = sqrt(var))
+      return(z)
+      }
+   
+   ex.ind.dat <- function(x, w, z, q, p, id) {
+      a <- make.var.row.dat(x, w) %>% 
+      mutate(id_char = q$id[-p]) %>% 
+      left_join(z)
+      a <- filter(a, id_char == id) %>% 
+         select(c("col.obj", "var"))
+      return(a)
+      }
+   get.ind.var <- function(id) {
+      a <- ex.ind.dat(sup.gen.dat, row.gen.dat, ind.gen.sup, 
+                          row.stack.d, zero.rows.r,
+                          id)
+      b <- make.var.row.dat(sup.gen.dat, row.gen.dat) %>% 
+         select(c("var", "std", "col.obj")) %>% 
+         group_by(col.obj) %>% 
+         summarize(m.var =  median(var)) %>% 
+         right_join(a)
+      return(b)
+      }
+   #l.id <- ex.ind.dat(sup.lab.dat, row.lab.dat, ind.lab.sup, 
+    #                   col.stack.d, zero.rows.c,
+     #                  id.num)
+   #var.l.m <- make.var.row.dat(sup.lab.dat, row.lab.dat) %>% 
+    #  select(c("var", "std", "col.obj")) %>% 
+     # group_by(col.obj) %>% 
+      #summarize(m.var =  median(var)) %>% 
+      #right_join(l.id)
+   make.ind.var.plot <- function(w) {
+      p <- ggplot(data = w, aes(y = reorder(col.obj, var), 
+                                x = var, color = col.obj, group = col.obj))
+      p <- p + geom_point(stat = "identity", size = 8)
+      p <- p + geom_point(aes(x = m.var),
+                          stat = "identity", size = 6, shape = 3,
+                          color = "red")
+      p <- p + scale_color_manual(values = cols)
+      p <- p + guides(color = "none")
+      p <- p + theme_ridges() + labs(y = "", x = "")
+      p <- p + theme(axis.text = element_text(size = 18))
+      p
+      } 
+   png(file = here("Plots", "genre-var-id_ex1.png"), width=w, height=h)
+   make.ind.var.plot(get.ind.var("id_65"))
+   dev.off()
+   png(file = here("Plots", "data-ex-rbb-id2.png"), width=w, height=h)
+   make.aff.plot(row.bb[["id_2"]])
+   dev.off()
+   png(file = here("Plots", "genre-var-id_ex-id2.png"), width=w, height=h)
+   make.ind.var.plot(get.ind.var("id_2"))
+   dev.off()
+```
+
+```{r Demographic Cloud-Specific Plots}
+   make.demog.dat <- function(w, g, d) {
+      a <- select(demog.dat, c("id_char", d))
+      b <- filter(w, col.obj == g) %>% 
+         left_join(a) 
+      return(b)
+      }
+   w <- 900
+   h <- 800
+   # Education
+   png(file = here("Plots", "demog-classical-educ.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.gen.dat.id, "Classical", "educ.f"), 
+                    "Classical", "educ.f", r = 3)
+   dev.off()
+   png(file = here("Plots", "demog-jazz-educ.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.gen.dat.id, "Jazz", "educ.f"), 
+                    "Jazz", "educ.f", r = 3)
+   dev.off()
+   png(file = here("Plots", "demog-opera-educ.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.gen.dat.id, "Opera", "educ.f"), 
+                    "Opera", "educ.f", r = 3)
+   dev.off()  
+   
+   # Race
+   png(file = here("Plots", "demog-rap-race.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.gen.dat.id, "Rap", "race"), 
+                    "Rap", "race", r = 3)
+   dev.off()
+   png(file = here("Plots", "demog-jazz-race.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.gen.dat.id, "Jazz", "race"), 
+                    "Jazz", "race", r = 3)
+   dev.off()
+   png(file = here("Plots", "demog-folk-race.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.gen.dat.id, "Folk", "race"), 
+                    "Folk", "race", r = 3, b = 3)
+   dev.off() 
+   
+   # Age
+   png(file = here("Plots", "demog-rap-age.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.gen.dat.id, "Rap", "age"), 
+                    "Rap", "age", r = 3)   
+   dev.off()
+   png(file = here("Plots", "demog-metal-age.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.gen.dat.id, "Metal", "age"), 
+                    "Metal", "age", r = 3)   
+   dev.off()
+   png(file = here("Plots", "demog-altrock-age.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.gen.dat.id, "Alt_Rock", "age"), 
+                    "Alt_Rock", "age", r = 3)   
+   dev.off()
+   
+   # Class
+   png(file = here("Plots", "demog-lower-subjclass.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.lab.dat.id, "Lower_Class", "subjclass"), 
+                    "Lower_Class", "subjclass", r = 3)   
+   dev.off()
+   png(file = here("Plots", "demog-working-subjclass.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.lab.dat.id, "Working_Class", "subjclass"), 
+                    "Working_Class", "subjclass", r = 3)   
+   dev.off()
+   png(file = here("Plots", "demog-middle-subjclass.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.lab.dat.id, "Middle_Class", "subjclass"), 
+                    "Middle_Class", "subjclass", r = 3)   
+   dev.off()
+   png(file = here("Plots", "demog-upper-subjclass.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.lab.dat.id, "Upper_Class", "subjclass"), 
+                    "Upper_Class", "subjclass", r = 3)   
+   dev.off()
+   
+   # Education
+   png(file = here("Plots", "demog-college-educ.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.lab.dat.id, "College", "educ.f"), 
+                    "College", "educ.f", r = 3)   
+   dev.off()
+   png(file = here("Plots", "demog-nocollege-educ.png"), width=w, height=h)
+   make.demog.plot(make.demog.dat(row.lab.dat.id, "No_College", "educ.f"), 
+                    "No_College", "educ.f", r = 3)   
+   dev.off()
+```
+
+```{r Demographic Specific Cloud Variance Plots}
+   h <- 700
+   w <- 700
+   make.demog.var.dat <- function(w, g, d) {
+      a <- make.demog.dat(w, g, d) 
+      b <- a %>% 
+         group_by_at(8) %>% 
+         summarize(across(1:3, mean)) %>% 
+         rename(Prot.1 = Dim.1, Prot.2 = Dim.2, Prot.3 = Dim.3) %>% 
+         right_join(a) %>% 
+         mutate(dist.cent.1 = (Dim.1 - Prot.1)^2) %>% 
+         mutate(dist.cent.2 = (Dim.2 - Prot.2)^2) %>% 
+         mutate(dist.cent.3 = (Dim.3 - Prot.3)^2) %>% 
+         mutate(var = dist.cent.1 + dist.cent.2 + dist.cent.3) %>% 
+         group_by_at(1) %>% 
+         summarize(var = mean(var)) %>% 
+         rename(col.obj = 1)
+      return(b)
+   }
+   # Education
+   png(file = here("Plots", "demog-classical-educ-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.gen.dat.id, 
+                                          "Classical", "educ.f"), ps = 12) 
+   dev.off()
+   png(file = here("Plots", "demog-jazz-educ-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.gen.dat.id,
+                                          "Jazz", "educ.f"), ps = 12) 
+   dev.off()
+   png(file = here("Plots", "demog-opera-educ-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.gen.dat.id, 
+                                          "Opera", "educ.f"), ps = 12) 
+   dev.off()
+   # Race
+   png(file = here("Plots", "demog-jazz-race-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.gen.dat.id, 
+                                          "Jazz", "race"), ps = 12) 
+   dev.off()
+   png(file = here("Plots", "demog-rap-race-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.gen.dat.id, 
+                                          "Rap", "race"), ps = 12) 
+   dev.off()
+   png(file = here("Plots", "demog-folk-race-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.gen.dat.id, 
+                                          "Folk", "race"), ps = 12) 
+   dev.off()
+   # Age
+   png(file = here("Plots", "demog-metal-age-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.gen.dat.id, 
+                                          "Metal", "age"), ps = 12) 
+   dev.off()
+   png(file = here("Plots", "demog-rap-age-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.gen.dat.id, 
+                                          "Rap", "age"), ps = 12) 
+   dev.off()
+   png(file = here("Plots", "demog-altrock-age-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.gen.dat.id, 
+                                          "Alt_Rock", "age"), ps = 12) 
+   dev.off()
+   # Class
+   png(file = here("Plots", "demog-lower-subjclass-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.lab.dat.id, 
+                                          "Lower_Class", "subjclass"), ps = 12) 
+   dev.off()
+   png(file = here("Plots", "demog-working-subjclass-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.lab.dat.id, 
+                                          "Working_Class", "subjclass"), ps = 12) 
+   dev.off()
+   png(file = here("Plots", "demog-middle-subjclass-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.lab.dat.id, 
+                                          "Middle_Class", "subjclass"), ps = 12) 
+   dev.off()
+   png(file = here("Plots", "demog-upper-subjclass-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.lab.dat.id, 
+                                          "Upper_Class", "subjclass"), ps = 12) 
+   dev.off()
+   
+   # Education
+   png(file = here("Plots", "demog-college-educ-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.lab.dat.id, 
+                                          "College", "educ.f"), ps = 12) 
+   dev.off()
+   png(file = here("Plots", "demog-nocollege-educ-var.png"), width=w, height=h)
+   make.var.plot.demog(make.demog.var.dat(row.lab.dat.id, 
+                                          "No_College", "educ.f"), ps = 12) 
+   dev.off()
+```
+
+
+
