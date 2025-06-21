@@ -70,9 +70,9 @@ Where $l^{(p)}_{kl}$ records the $p^{th}$ individual's perceived similarity betw
 \subsection*{Individual Backbone Extraction}
 Because each dual projection is likely to over-estimate the perceived similarities between genres and labels at the level of the individual, I use backbone extraction on each individual-level projection---more specifically, the Stochastic Degree Sequence Model (SDSM)---to isolate the most significant genre-to-genre and label-to-label associations for each person \citep{neal2014backbone-b29}. 
 
-The SDSM works as follows: In the first step, a generalized linear model for binary outcomes is used to predict the probability of a tie between each genre and label in the two-mode network, using the number of times a genre was associated with social label and the number of times a social label was associated with a genre (the degrees of the nodes in each mode) and their interaction as predictors. From the predicted probabilities derived from this model (where the unit of analysis is the genre/label pair), we create an ensemble of two-mode networks, generate genre-to-genre and label-to-label projections for each, and compute the proportion of times that the projected edge weight between pairs of genres and pairs of labels is smaller in the generated projection ensemble than that observed in the original network projection. We then assign a binary link between two genres and two labels in the corresponding backbone (indicating perceived similarity) if this percentage falls below a certain threshold. In these data, the usual $p < 0.05$ criterion proves to be too strong (generating mostly empty backbones) for each genre-to-genre and label-to-label projection. Accordingly, I use a less stringent criterion of $p < 0.45$.  
+The SDSM works as follows: In the first step, a generalized linear model for binary outcomes (binomial family with logit link function) is used to predict the probability of a tie between each genre and label in the two-mode network, using the number of times a genre was associated with social label and the number of times a social label was associated with a genre (the degrees of the nodes in each mode) and their interaction as predictors. From the predicted probabilities derived from this model (where the unit of analysis is the genre/label pair), we generate an ensemble of two-mode networks as Bernoulli draws from the vector of predicted probabilities, compute row and column projections for each, and estimate the proportion of times that the projected edge weight between pairs of genres and pairs of labels is smaller in the generated projection ensemble than that observed in the original network projection. We then assign a binary link between two genres and two labels in the corresponding backbone (indicating perceived similarity) if this percentage falls below a certain threshold. In these data, the usual $\alpha < 0.05$ criterion proves to be too strong (generating mostly empty backbones) for each genre-to-genre and label-to-label projection. Accordingly, I use a less stringent criterion of $\alpha < 0.45$.  
 
-\begin{figure}[ht!]
+\begin{figure}[t]
     \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
     \centering
      \begin{subfigure}[b]{0.49\textwidth}
@@ -89,9 +89,10 @@ The SDSM works as follows: In the first step, a generalized linear model for bin
     \label{fig:ind-ex-aff}
 \end{figure}
 
-Figure~\ref{fig:ind-ex-aff} shows the cognitive two-mode network matrices of the associations between genres and social labels for two individuals in the data. It is clear from this example that the averaged associations shown in Figure~\ref{fig:main} hide quite a lot of individual variation and idiosyncratic perceptions. For instance, Case ID 65 believes that Heavy Metal encompasses most types of people, regardless of gender and race (excluding Asians), but thinks that Jazz music only appeals to older white or Hispanic people with a college degree. Case ID 236, on the other hand, thinks that Metal fans are mostly young white men without a college degree, but the classical appeals to most people regardless of gender, race, and age.  
+\section*{Workflow Illustration}
+Figure~\ref{fig:ind-ex-aff} shows the cognitive two-mode network matrices of the associations between genres and social labels for two individuals in the data. It is clear from this example that the averaged associations shown in Figure~\ref{fig:main} hide quite a lot of individual variation and idiosyncratic perceptions of what goes with what \citep{goldberg2018beyond-f2f}. For instance, Case ID 65 believes that Heavy Metal encompasses most types of people, regardless of gender and race (excluding Asians), but thinks that Jazz music only appeals to older white or Hispanic people with a college degree. Case ID 236, on the other hand, suggests that Metal fans are mostly young, white, working-class men. However, classical music appeals to most people regardless of gender, race (excluding Asian and Hispanic populations), and age, although these individuals are not typically working-class.  
 
-\begin{figure}[ht!]
+\begin{figure}[t]
     \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
     \centering
      \begin{subfigure}[b]{0.49\textwidth}
@@ -119,9 +120,11 @@ Figure~\ref{fig:ind-ex-aff} shows the cognitive two-mode network matrices of the
     \label{fig:ind-ex-rp}
 \end{figure}
 
-Figure~\ref{fig:ind-ex-rp} shows the individual row projections ($\mathbf{G}(p)$) and corresponding backbones for each of these two cases, encoding the perceived similarities between genres and social labels for each individual. We can see, for instance, that in accordance with their cognitive two-mode network, which sees the Metal audience as relatively undifferentiated, Case ID 65 does not strongly associate Metal with any other genre, except contemporary rock. In the same way, Case ID 236 sees Classical and Opera as strongly linked, and Metal as most similar to such genres as Reggae, Rap, Alt Rock, and Contemporary Rock. The corresponding column projections ($\mathbf{L}(p)$) and backbones for these two cases are shown in Figure~\ref{fig:ind-ex-cp}. Both individuals associate white people with a college degree; Case ID 65 sees the label ``Working Class'' as most similar to ``Black'' and ``Young,'' but Case ID 263 sees the same label as most similar to ``Hispanic," ``Asian,'' and people without a college education. 
+Figure~\ref{fig:ind-ex-rp} shows the individual row projections ($\mathbf{G}(p)$) and corresponding backbones for each of these two cases, encoding the perceived similarities between genres and social labels for each individual. We can see, for instance, that in accordance with their cognitive two-mode network, which sees the Metal audience as relatively undifferentiated, Case ID 65 does not strongly associate Metal with any other genre, except contemporary rock and classical (the last a fairly idiosyncratic linkage). In the same way, Case ID 236 sees Classical and Opera as strongly linked, and Metal as most similar to such genres as Reggae, Rap, Alt Rock, and Contemporary Rock. 
 
-\begin{figure}[ht!]
+The corresponding column projections ($\mathbf{L}(p)$) and backbones for these two cases are shown in Figure~\ref{fig:ind-ex-cp}. As we can see, Case ID 65 identifies the label ``white" as most similar to ``College Educated" and "=``Upper Class," whereas Case ID 236 only associates ``white" with ``Middle Class." Similarly, Case ID 65 sees the label ``Upper Class'' as most similar to ``White,'' ``Female,'' and ``Young,'' but Case ID 263 sees the same label as most similar to ``Old'' and ``Middle Class.''
+
+\begin{figure}[t]
     \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
     \centering
      \begin{subfigure}[b]{0.49\textwidth}
@@ -148,22 +151,101 @@ Figure~\ref{fig:ind-ex-rp} shows the individual row projections ($\mathbf{G}(p)$
     \label{fig:ind-ex-cp}
 \end{figure}
 
-\section*{Workflow Illustration}
-Once we have computed the genre and label projection backbones for each individual in the survey, we stack these matrices, generating two tables of dimensions $(N \times 20) \times 20$ (for genres) and $(N \times 15) \times 20$ (for labels). We applied the subject of each of these to Correspondence Analysis (CA) to obtain consensus (column) scores of the similarity between genres and labels, along with individual perceptions of the placement of each genre and label in the same spaces (row scores) \citep{kumbasar1994systematic-213}. These scores are then analyzed using Geometric Data Analytic methods \citep{rouanet2000geometric-a44}.
+Once we have computed the genre and label projection backbones for each individual in the survey, we stack these matrices, generating two tables of dimensions $(N \times 20) \times 20$ (for genres) and $(N \times 15) \times 20$ (for labels). We then compute the spectral decomposition of these two matrices using Correspondence Analysis (CA). This analytical framework thus generates three sets of scores: person-specific judgments of the relative similarity of genres and labels (row scores), aggregate or consensus judgments across all individuals of genre and label similarity (column scores), and supplementary scores for genres and labels representing the centroid of the cloud of person-specific judgments \citep{kumbasar1994systematic-213}. These scores are then analyzed using Geometric Data Analysis (GDA) methods \citep{rouanet2000geometric-a44}. Ultimately, this approach allows me to examine heterogeneity in folk understandings by observing how multiple clouds of individuals (projected into both genre and social label spaces) distribute themselves along principal axes, providing critical insights into the variation in meaning consensus across different levels of analysis. The resulting data workflow is shown in Figure~\ref{fig:workflow}.
 
-\begin{figure}[ht!]
+\begin{figure}[t]
     \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
     \centering
-        \includegraphics[trim={1cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{mondo-workflow.png}
-    \caption{Individual label projection matrices and corresponding backbones.}
-    \label{fig:ind-ex-cp}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=1.0\textwidth]{Plots/mondo-workflow.png}
+    \caption{Workflow from dual projection, backbone extraction, to geometric data analysis.}
+    \label{fig:workflow}
+\end{figure}
+
+\section*{Results}
+\subsection*{Consensus Scores Biplots}
+We begin by examining CA biplots of the consensus (column) scores for both genres and labels. Figure~\ref{fig:ca-genre-biplot12} shows the correspondence plot for genres along the first two dimensions, with the color intensity of the genre label proportional to their contribution to the first two dimensions. We can see that the CA results split the twenty genres into three well-separated groups. 
+
+\begin{figure}[t]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.6\textwidth]{Plots/ca-genre-col12.png}
+    \caption{Correspondence plot of consensus column scores for genres (dimensions one and two).}
+    \label{fig:ca-genre-biplot12}
+\end{figure}
+
+Along the first (horizontal) dimension, the more traditional ``highbrow'' (artistically consecrated) genres (Classical, Opera) on the right are contrasted to such genres as Metal, Rap, and Reggae on the left. On the second (vertical) axis, these genres are contrasted with genres such as Gospel, Folk, and Bluegrass (at the bottom), which are more traditionally associated with rural or religiously observant America. 
+
+\begin{figure}[t]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.6\textwidth]{Plots/ca-genre-col13.png}
+    \caption{Correspondence plot of consensus column scores for genres (dimensions one and three).}
+    \label{fig:ca-genre-biplot13}
+\end{figure}
+
+Figure~\ref{fig:ca-genre-biplot13} shows the same biplot as Figure~\ref{fig:ca-genre-biplot12} but with the third dimension scores on the vertical axis. We can see that the third dimension primarily separates the cluster of ``popular culture'' genres by the perceived race of the audience, with those popular genres which are see as preferred by Black or Hispanic people (Rap, Reagge, Latin, Blues, and Gospel) toward the top, and those whose audiences are seen as overwhelmingly white toward the bottom (Metal and various flavors of Rock). 
+
+\begin{figure}[t]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.6\textwidth]{Plots/ca-label-col12.png}
+    \caption{Correspondence plot of consensus column scores for social labels (dimensions one and two).}
+    \label{fig:ca-label-biplot12}
+\end{figure}
+
+Figure~\ref{fig:ca-label-biplot12} shows the corresponding consensus biplot for social labels for the first two dimensions. We can see that the main action happens along the first (horizontal) axis, which separates labels according to Race, Age, and Class, with working and lower class, young, Black, Hispanic, and No College on the left, and Middle Age, Old, Upper and Middle Class, and College Educated on the right. Gender Labels are toward the plot's origin (indicating no strong association with either dimension). The second dimension is just a residual axis, separating the seldom-used label of ``Asian'' from the rest. 
+
+\begin{figure}[t]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.6\textwidth]{Plots/ca-label-col13.png}
+    \caption{Correspondence plot of consensus column scores for social labels (dimensions one and three).}
+    \label{fig:ca-label-biplot13}
+\end{figure}
+
+Figure~\ref{fig:ca-label-biplot13} shows the same biplot as Figure~\ref{fig:ca-label-biplot12} but with the third dimension scores on the vertical axis. We can see that the third dimension separates the gender labels (which are perceived by people to be similar to the racial labels of ``white" and ``middle-aged") from the rest, positioning them at the bottom of the plot. 
+\subsection*{Fuzzy Biplots for Genres}
+While the consensus scores provide insightful information of the way that persons classify genres and labels \textit{on average}, as we noted at the outset, this hides as much as it reveals. For each of the genres and labels shown in the previous figure is actually a \textit{distribution} (a ``cloud'' of points in GDA parlance) of the audiences pertaining to each genre. The patterning of this distribution can be seen by plotting the clouds instead of the single consensus score in a CA biplot. 
+
+\begin{figure}[t]
+    \captionsetup[subfigure]{font=footnotesize,labelfont=footnotesize}
+    \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex1.png}
+            \caption{}
+            \label{fig:}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex2.png}
+            \caption{}
+            \label{fig:}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex4.png}
+            \caption{}
+            \label{fig:}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex7.png}
+            \caption{}
+            \label{fig:}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex5.png}
+            \caption{}
+            \label{fig:}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.49\textwidth}
+        \includegraphics[trim={0cm 0cm 0cm 0cm},clip, width=0.9\textwidth]{Plots/genre-proto-ex7.png}
+            \caption{}
+            \label{fig:}
+    \end{subfigure}
+    \caption{.}
+    \label{fig:}
 \end{figure}
 
 
-This analytical framework thus generates three sets of scores: person-specific judgments of the relative similarity of genres and labels (row scores), aggregate judgments of genre and label similarity (column scores), and supplementary scores for genres and labels representing the centroid of the cloud of person-specific judgments. Ultimately, this allows me to examine heterogeneity in folk understandings by observing how multiple clouds of individuals (projected into both genre and social label spaces) distribute themselves along principal axes, providing critical insights into the variation in meaning consensus across different levels of analysis. The resulting data workflow is shown in Figure
-
-
-\section*{Results}
+\subsection*{Fuzzy Biplots for Labels}
 
 \section*{Discussion and Conclusions}
 
