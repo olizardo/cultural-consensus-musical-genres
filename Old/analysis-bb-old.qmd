@@ -37,69 +37,123 @@ execute:
    dat <- bind_cols(tibble(id_char = paste("id", sapply(dat[, 1], as.character), sep = "_")), dat) %>% 
    select(id_char, classicalfemale:hvymtluc, -ends_with("none")) %>%  #selecting relevant columns
    na.omit() #removing missing values
-      r <- c("Classical", "Opera", "Jazz", "Broadway", "Easy", "Big_Band", "Classic_Rock", "Country", "Bluegrass", "Folk", "Gospel", "Latin", "Rap", "Blues", "Reggae", "Pop", "Contemp_Rock", "Alt_Rock", "Dance", "Metal")
-       c <- c("Female", "Male", "White", "Black", "Hispanic", "Asian", "College", "No_College", "Young", "Mid_Age", "Old", "Lower_Class", "Working_Class", "Middle_Class", "Upper_Class")
-```
-
-```{r Summary Table of Averaged Perceptions}
-   tab <- colSums(dat[,2:301])/nrow(dat)
-   tab <- matrix(tab, nrow = 20,  byrow = TRUE)
-   colnames(tab) <- c
-   rownames(tab) <- r
-   png(file = here("Plots", "main.png"), width=1000, height=700)
-   corrplot(tab, is.corr = FALSE, method = "color", 
-      tl.col = "black", tl.cex = 1, tl.srt = 45,
-      addCoef.col = "black", cl.pos = "n", cl.lim = c(0, max(tab)),
-      number.cex = 1, number.digits = 2, addgrid.col = "darkgray",
-      col=colorRampPalette(c("lightblue","orange","red"))(200))
-   dev.off()
 ```
 
 ```{r Creating individual matrices}
    make.mat <- function(x) {
       x <- matrix(as.numeric(x), 20, 15, byrow = TRUE)
       return(x)
+   }
+   row.breiger <- function(x) {
+      x <- x %*% t(x)
+      return(x)
       }
-   bb.sdsm <- function(x) {
-     tryCatch({
-         w <- round(sdsm(x, alpha = NULL, missing.as.zero = TRUE)$Pupper, 2)
-         return(w)
-            }, error = function(e) {return(NULL)})
-         }
+   col.breiger <- function(x) {
+      x <- t(x) %*% x
+      return(x)
+      }
+   bb <- function(x, a = 0.25) {
+      x <- suppressMessages(disparity(x, alpha = a, narrative = FALSE))
+      return(x)
+      }
    den <- rowSums(dat[,2:301])/300
    bad.den <- which(den > .9 | den < 0.1)
    dat2 <- dat[-c(bad.den), 2:301]
    ind.list <- split(dat2, seq(nrow(dat2))) # splitting each row of data frame into list objects
    ind.mat <- lapply(ind.list, make.mat) # creating individual two mode network of genre by labels
+      r <- c("Classical", "Opera", "Jazz", "Broadway", "Easy", "Big_Band", "Classic_Rock", "Country", "Bluegrass", "Folk", "Gospel", "Latin", "Rap", "Blues", "Reggae", "Pop", "Contemp_Rock", "Alt_Rock", "Dance", "Metal")
+       c <- c("Female", "Male", "White", "Black", "Hispanic", "Asian", "College", "No_College", "Young", "Mid_Age", "Old", "Lower_Class", "Working_Class", "Middle_Class", "Upper_Class")
    ind.mat <- lapply(ind.mat, function(x) {rownames(x) <- r; x}) # naming individual rows
    ind.mat <- lapply(ind.mat, function(x) {colnames(x) <- c; x}) # naming individual columns
    names(ind.mat) <- dat$id_char[-c(bad.den)]
-   ind.mat.t <- lapply(ind.mat, function(x) {t(x)})
-   ind.row <- lapply(ind.mat, function(x) {x %*% t(x)}) # individual genre projection
-   ind.col <- lapply(ind.mat, function(x) {t(x) %*% x}) # individual label projection
-   # row.bb <- lapply(ind.mat, bb.sdsm)
-   # col.bb <- lapply(ind.mat.t, bb.sdsm)
-   # null.rows <- which(as.numeric(unlist(lapply(row.bb, is.null))) == 1)
-   # null.cols <- which(as.numeric(unlist(lapply(col.bb, is.null))) == 1)
-   # row.bb <- row.bb[-null.rows]
-   # col.bb <- col.bb[-null.cols]
-   # row.bb <- lapply(row.bb, function(x) {ifelse(is.nan(x), 1, x)})
-   # col.bb <- lapply(col.bb, function(x) {ifelse(is.nan(x), 1, x)})
-   # row.bb <- lapply(row.bb, function(x) {diag(x) <- 1; x})
-   # col.bb <- lapply(col.bb, function(x) {diag(x) <- 1; x})
-   # save(row.bb, col.bb, file = here("bb.RData"))
-   load(here("bb.RData"))
-   row.bb <- lapply(row.bb, function(x) {(x < 0.45) * 1})
-   col.bb <- lapply(col.bb, function(x) {(x < 0.45) * 1})
+   ind.row <- lapply(ind.mat, row.breiger) # individual genre projection
+   ind.col <- lapply(ind.mat, col.breiger) # individual label projection
+   row.bb <- lapply(ind.row, bb)
+   col.bb <- lapply(ind.col, bb)
    row.stack <- matrix(unlist(row.bb), ncol = 20, byrow = TRUE) # genre stacked matrix
    col.stack <- matrix(unlist(col.bb), ncol = 15, byrow = TRUE) # label stacked matrix
    colnames(row.stack) <- r # naming genre stacked matrix columns
    colnames(col.stack) <- c # naming label stacked matrix columns
-   m <- nrow(row.stack)/20
-   rownames(row.stack) <- rep(r, m) # naming genre stacked matrix rows
-   rownames(col.stack) <- rep(c, m) # naming label stacked matrix rows
+   rownames(row.stack) <- rep(r, nrow(dat2)) # naming genre stacked matrix rows
+   rownames(col.stack) <- rep(c, nrow(dat2)) # naming label stacked matrix rows
    zero.rows.r <- which(rowSums(row.stack) == 0) # which genre stacked matrix rows sum to zero?
    zero.rows.c <- which(rowSums(col.stack) == 0) # which label stacked matrix rows sum to zero?
+   names(ind.row) <- dat$id_char[-c(bad.den)]
+   names(ind.col) <- dat$id_char[-c(bad.den)]
+   names(row.bb) <- dat$id_char[-c(bad.den)]
+   names(col.bb) <- dat$id_char[-c(bad.den)]
+```
+
+```{r Stacked CA}
+   #genres
+   row.stack.d <- data.frame(row.stack)
+   row.stack.d$genre <- rep(r, nrow(dat2))
+   row.stack.d$id <- rep(dat$id_char[-bad.den], each = 20)
+   CA.r <- CA(row.stack.d, graph = FALSE, row.sup = zero.rows.r, quali.sup = c(21, 22))
+   #labels
+   col.stack.d <- data.frame(col.stack)
+   col.stack.d$label <- rep(c, nrow(dat2))
+   col.stack.d$id <- rep(dat$id_char[-bad.den], each = 15)
+   CA.c <- CA(col.stack.d, graph = FALSE, row.sup = zero.rows.c, quali.sup = c(16, 17))
+```
+
+```{r CA Statistics}
+   stuff <- theme(axis.text = element_text(size = 18),
+                  axis.title = element_text(size = 22))
+   png(file = here("Plots", "scree-genres.png"), width=500, height=600)
+   fviz_eig(CA.r, ncp = 6) + stuff + ggtitle("") + ylim(0, 12) + 
+      labs(y = "Explained Var. %")
+   dev.off()
+   png(file = here("Plots", "scree-labels.png"), width=500, height=600)
+   fviz_eig(CA.c, ncp = 6) + stuff + ggtitle("") + ylim(0, 12) + 
+      labs(y = "Explained Var. %")
+   dev.off()
+```
+
+```{r Plot Data}
+     make.plot.dat <- function(x) { 
+         w <-  data.frame(x) %>% 
+         mutate(col.obj = gsub("\\..*","",rownames(x))) 
+         rownames(w) <- 1:nrow(x)
+         return(w)
+         }
+      #genre column scores data frame
+      col.gen.dat <-  data.frame(CA.r$col$coord) %>% 
+         mutate(col.obj = rownames(CA.r$col$coord)) 
+      #label column scores data frame
+      col.lab.dat <-  data.frame(CA.c$col$coord) %>% 
+         mutate(col.obj = rownames(CA.c$col$coord)) 
+      #supplementary scores data frame for genres
+      sup.gen.dat <- CA.r$quali.sup$coord[1:20, ] 
+      sup.gen.dat <- data.frame(sup.gen.dat, 
+                                col.obj = gsub("genre.", "", rownames(sup.gen.dat)))
+      rownames(sup.gen.dat) <- 1:nrow(sup.gen.dat)
+      #supplementary scores data frame for labels
+      sup.lab.dat <- CA.c$quali.sup$coord[1:15, ] 
+      sup.lab.dat <- data.frame(sup.lab.dat, 
+                                col.obj = gsub("label.", "", rownames(sup.lab.dat)))
+      rownames(sup.lab.dat) <- 1:nrow(sup.lab.dat)
+      #genre row scores
+      row.gen.dat <- make.plot.dat(CA.r$row$coord) 
+      #label row scores
+      row.lab.dat <- make.plot.dat(CA.c$row$coord) 
+      #supplementary individual scores for genres
+      ind.gen.sup <- CA.r$quali.sup$coord %>% 
+         data.frame() %>% 
+         slice(21:nrow(CA.r$quali.sup$coord)) %>% 
+         mutate(id_char = str_sub(rownames(ind.gen.sup), 4, -1))
+      row.names(ind.gen.sup) <- 1:nrow(ind.gen.sup)
+      #supplementary individual scores for labels
+      ind.lab.sup <- CA.c$quali.sup$coord %>% 
+         data.frame() %>% 
+         slice(16:nrow(CA.c$quali.sup$coord)) %>% 
+         mutate(id_char = str_sub(rownames(ind.lab.sup), 4, -1))
+      row.names(ind.lab.sup) <- 1:nrow(ind.lab.sup)
+```
+
+```{r Cloud Variance Functions}
+   check.cloud.var <- function()
+
 ```
 
 
@@ -154,73 +208,6 @@ execute:
    dev.off()
 ```
 
-```{r Stacked CA}
-   #genres
-   row.stack.d <- data.frame(row.stack)
-   row.stack.d$genre <- rep(r, m)
-   row.stack.d$id <- rep(names(row.bb), each = 20)
-   CA.r <- CA(row.stack.d, graph = FALSE, row.sup = zero.rows.r, quali.sup = c(21, 22))
-   #labels
-   col.stack.d <- data.frame(col.stack)
-   col.stack.d$label <- rep(c, m)
-   col.stack.d$id <- rep(names(col.bb), each = 15)
-   CA.c <- CA(col.stack.d, graph = FALSE, row.sup = zero.rows.c, quali.sup = c(16, 17))
-```
-
-```{r CA Statistics}
-   stuff <- theme(axis.text = element_text(size = 18),
-                  axis.title = element_text(size = 22))
-   png(file = here("Plots", "scree-genres.png"), width=500, height=600)
-   fviz_eig(CA.r, ncp = 6) + stuff + ggtitle("") + ylim(0, 12) + 
-      labs(y = "Explained Var. %")
-   dev.off()
-   png(file = here("Plots", "scree-labels.png"), width=500, height=600)
-   fviz_eig(CA.c, ncp = 6) + stuff + ggtitle("") + ylim(0, 12) + 
-      labs(y = "Explained Var. %")
-   dev.off()
-```
-
-```{r Plot Data}
-     make.plot.dat <- function(x) { 
-         w <-  data.frame(x) %>% 
-         mutate(col.obj = gsub("\\..*","",rownames(x))) 
-         rownames(w) <- 1:nrow(x)
-         return(w)
-         }
-      #genre column scores data frame
-      col.gen.dat <-  data.frame(CA.r$col$coord) %>% 
-         mutate(col.obj = rownames(CA.r$col$coord)) 
-      #label column scores data frame
-      col.lab.dat <-  data.frame(CA.c$col$coord) %>% 
-         mutate(col.obj = rownames(CA.c$col$coord)) 
-      #supplementary scores data frame for genres
-      sup.gen.dat <- CA.r$quali.sup$coord[1:20, ] 
-      sup.gen.dat <- data.frame(sup.gen.dat, 
-                                col.obj = gsub("genre.", "", rownames(sup.gen.dat)))
-      rownames(sup.gen.dat) <- 1:nrow(sup.gen.dat)
-      #supplementary scores data frame for labels
-      sup.lab.dat <- CA.c$quali.sup$coord[1:15, ] 
-      sup.lab.dat <- data.frame(sup.lab.dat, 
-                                col.obj = gsub("label.", "", rownames(sup.lab.dat)))
-      rownames(sup.lab.dat) <- 1:nrow(sup.lab.dat)
-      #genre row scores
-      row.gen.dat <- make.plot.dat(CA.r$row$coord) 
-      #label row scores
-      row.lab.dat <- make.plot.dat(CA.c$row$coord) 
-      #supplementary individual scores for genres
-      ind.gen.sup <- CA.r$quali.sup$coord %>% 
-         data.frame() %>% 
-         slice(21:nrow(CA.r$quali.sup$coord)) %>% 
-         mutate(id_char = str_sub(rownames(CA.r$quali.sup$coord[21:nrow(CA.r$quali.sup$coord), ]), 4, -1))
-      row.names(ind.gen.sup) <- 1:nrow(ind.gen.sup)
-      #supplementary individual scores for labels
-      ind.lab.sup <- CA.c$quali.sup$coord %>% 
-         data.frame() %>% 
-         slice(16:nrow(CA.c$quali.sup$coord)) %>% 
-         mutate(id_char = str_sub(rownames(CA.c$quali.sup$coord[16:nrow(CA.c$quali.sup$coord), ]), 4, -1))
-      row.names(ind.lab.sup) <- 1:nrow(ind.lab.sup)
-```
-
 ```{r Column Score Similarity Plots}
    make.col.plot <- function(x, d1, d2)  {
       p <- fviz_ca_col(x, axes = c(d1, d2),  
@@ -257,44 +244,44 @@ execute:
    w <- 750
    png(file = here("Plots", "genre-proto-ex1.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat, 
-                     seed = 125, ls = 5, 
-                     1, 2, pa = .35,  t = 3, b = 3, l = 2, r = 3, bns = 6,
+                     seed = 125, ls = 5,
+                     1, 2, pa = .35,  t = 3, b = 3, l = 2, r = 3,
                      c("Rap", "Folk", "Classical"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex2.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 6,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3,
                      c("Alt_Rock", "Gospel", "Opera"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex3.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 6,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 5,
                      c("Metal", "Bluegrass", "Broadway"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex4.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3.25, bns = 6,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 4,
                      c("Jazz", "Reggae", "Blues", "Rap", "Classical"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex5.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 6,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 4,
                      c("Country", "Bluegrass", "Classic_Rock", "Folk"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex6.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 6,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 4,
                      c("Alt_Rock", "Contemp_Rock", "Classic_Rock", "Metal"))
    dev.off()
    png(file = here("Plots", "genre-proto-ex7.png"), width=w, height=h)
       make.fuzz.plot(row.gen.dat, col.gen.dat, sup.gen.dat,
                      seed = 125, ls = 5,
-                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 6,
+                     1, 2, pa = .35,  t = 2, b = 2, l = 2, r = 3, bns = 4,
                      c("Broadway", "Classical", "Opera", "Easy", "Jazz"))
    dev.off()
 ```

@@ -16,7 +16,7 @@ execute:
    library(FactoMineR)
    library(ggplot2)
    library(ggrepel)
-   library(corrplot)
+   library(ggcorrplot)
    library(ggridges)
    library(haven)
    library(here)
@@ -37,10 +37,10 @@ execute:
 ```
 
 ```{r Creating individual matrices}
-      r <- c("Classical", "Opera", "Jazz", "Broadway", "Easy", "Big_Band", "Classic_Rock", "Country", "Bluegrass", "Folk", "Gospel", "Latin", "Rap", "Blues", "Reggae", "Pop", "Contemp_Rock", "AltRock", "Dance", "Metal")
+      r <- c("Classical", "Opera", "Jazz", "Broadway", "Easy", "Big_Band", "Oldies", "Country", "Bluegrass", "Folk", "Gospel", "Latin", "Rap", "Blues", "Reggae", "Pop", "Rock", "AltRock", "Dance", "Metal")
        c <- c("Female", "Male", "White", "Black", "Hispanic", "Asian", "College", "No_College", "Young", "Mid_Age", "Old", "Lower_Class", "Working_Class", "Middle_Class", "Upper_Class")
    den <- rowSums(dat[,2:301])/300
-   bad.den <- which(den > .95 | den < 0.05)
+   bad.den <- which(den > .9 | den < 0.1)
    dat2 <- dat[-c(bad.den), 2:301]
    ind.list <- split(dat2, seq(nrow(dat2))) # splitting each row of data frame into list objects
    ind.mat <- lapply(ind.list, function(x) {matrix(as.numeric(x), 20, 15, byrow = TRUE)}) # creating individual two mode network of genre by labels
@@ -144,7 +144,7 @@ execute:
       row.lab.dat <- make.plot.dat(CA.c$row$coord) #label row scores
 ```
 
-```{r Column and Supplementary Score Similarity Plots}
+```{r Column Score Similarity Plots}
    h <- 625
    w <- 750
    source(here("make.sim.plot.R"))
@@ -152,57 +152,93 @@ execute:
    png(file = here("Plots", "ca-genre-col12.png"), width=w, height=h)
    make.sim.plot(col.gen.dat, 1, 2, "red", l = 1)
    dev.off()
-   png(file = here("Plots", "ca-genre-sup12.png"), width=w, height=h)
-   make.sim.plot(sup.gen.dat, 1, 2, "red", l = .6)
+   png(file = here("Plots", "ca-genre-col13.png"), width=w, height=h)
+   make.sim.plot(col.gen.dat, 1, 3, "red", l = 1)
+   dev.off()
+   png(file = here("Plots", "ca-genre-col14.png"), width=w, height=h)
+   make.sim.plot(col.gen.dat, 1, 4, "red", l = 1)
    dev.off()
    # labels
    png(file = here("Plots", "ca-label-col12.png"), width=w, height=h)
    make.sim.plot(col.lab.dat, 1, 2, "blue", l = 1)
    dev.off()
+   png(file = here("Plots", "ca-label-col13.png"), width=w, height=h)
+   make.sim.plot(col.lab.dat, 1, 3, "blue", l = 1)
+   dev.off()
+   png(file = here("Plots", "ca-label-col14.png"), width=w, height=h)
+   make.sim.plot(col.lab.dat, 1, 4, "blue", l = 1)
+   dev.off()
+```
+
+```{r Supplementary Score Similarity Plots}
+   h <- 625
+   w <- 750
+   source(here("make.sim.plot.R"))
+   #genres
+   png(file = here("Plots", "ca-genre-sup12.png"), width=w, height=h)
+   make.sim.plot(sup.gen.dat, 1, 2, "red", l = .6)
+   dev.off()
+   png(file = here("Plots", "ca-genre-sup13.png"), width=w, height=h)
+   make.sim.plot(sup.gen.dat, 2, 3, "red", l = .6)
+   dev.off()
+   png(file = here("Plots", "ca-genre-sup14.png"), width=w, height=h)
+   make.sim.plot(sup.gen.dat, 3, 4, "red", l = .6)
+   dev.off()
+   # labels
    png(file = here("Plots", "ca-label-sup12.png"), width=w, height=h)
    make.sim.plot(sup.lab.dat, 1, 2, "blue", l = .6)
    dev.off()
-```
-
-```{r Genre Cloud Plots}
-   source(here("make.fuzz.plot.R"))
-   h <- 625
-   w <- 750
-   png(file = here("Plots", "genre-proto-ex1.png"), width=w, height=h)
-      make.fuzz.plot(row.gen.dat, sup.gen.dat, seed = 23456,
-                     1, 2, xl = 2, yl = 2, pa = .05,
-                     c("Folk", "Contemp_Rock", "Big_Band", "Classic_Rock"))
+   png(file = here("Plots", "ca-label-sup13.png"), width=w, height=h)
+   make.sim.plot(sup.lab.dat, 2, 3, "blue", l = .6)
    dev.off()
-   png(file = here("Plots", "genre-proto-ex2.png"), width=w, height=h)
-      make.fuzz.plot(row.gen.dat, sup.gen.dat, seed = 234,
-                     1, 2, xl = 2, yl = 2, pa = .05,
-                     c("Reggae", "Opera", "Rap", "Opera"))
-   dev.off()
-   png(file = here("Plots", "genre-proto-ex3.png"), width=w, height=h)
-      make.fuzz.plot(row.gen.dat, sup.gen.dat, seed = 234,
-                     1, 2, xl = 2, yl = 1.5, pa = .05,
-                     c("Gospel", "Latin", "Easy"))
+   png(file = here("Plots", "ca-label-sup14.png"), width=w, height=h)
+   make.sim.plot(sup.lab.dat, 3, 4, "blue", l = .6)
    dev.off()
 ```
 
-```{r Label Cloud Plots}
+
+```{r}
+   d <- filter(row.gen.dat, col.obj %in% 
+                  c("Broadway", "Folk"))
+   p <- ggplot(data = d, aes(Dim.1, Dim.2, 
+                             group = col.obj, 
+                             fill = col.obj,
+                             color = col.obj))
+   p <- p + geom_vline(xintercept = 0, color = "gray")
+   p <- p + geom_hline(yintercept = 0, color = "gray")
+   #p <- p + stat_density_2d(geom = "polygon", aes(alpha=..level..^2))
+   p <- p + geom_jitter(aes(shape = col.obj), alpha = 0.15, size = 2)
+   p
+```
+
+
+
+```{r Comparing Genre Scores to Cloud Centroids}
    source(here("make.fuzz.plot.R"))
    h <- 625
    w <- 750
-   png(file = here("Plots", "label-proto-ex1.png"), width=w, height=h)
-      make.fuzz.plot(row.lab.dat, sup.lab.dat, seed = 234,
-                     1, 2, xl = 2, yl = 2, pa = .05,
-                     c("College", "Male", "Upper_Class"))
+   # genre plots
+   png(file = here("Plots", "genre-proto12.png"), width=w, height=h)
+      make.fuzz.plot(row.gen.dat, col.gen.dat, 1, 2, c("Folk", "Rap", "Classical"))
    dev.off()
-   png(file = here("Plots", "label-proto-ex2.png"), width=w, height=h)
-      make.fuzz.plot(row.lab.dat, sup.lab.dat, seed = 234,
-                     1, 2, xl = 2, yl = 2, pa = .05,
-                     c("Female", "No_College", "White"))
+   png(file = here("Plots", "genre-proto13.png"), width=w, height=h)
+      make.fuzz.plot(plot.dat.g, plot.dat3, 1, 3, c("AltRock", "Opera", "Gospel"))
    dev.off()
-   png(file = here("Plots", "label-proto-ex3.png"), width=w, height=h)
-      make.fuzz.plot(row.lab.dat, sup.lab.dat, seed = 234,
-                     1, 2, xl = 2, yl = 2.5, pa = .05,
-                     c("Asian", "Working_Class", "Hispanic"))
+   png(file = here("Plots", "genre-proto14.png"), width=w, height=h)
+      make.fuzz.plot(plot.dat.g, plot.dat3, 1, 4, c("Reggae", "Easy", "Classical"))
+   dev.off()
+   # label plots
+   png(file = here("Plots", "label-proto12-1.png"), width=w, height=h)
+      make.fuzz.plot(plot.dat.l, plot.dat4, 1, 2, c("Asian", "Female", "College"), lim = 1)
+   dev.off()  
+   png(file = here("Plots", "label-proto12-2.png"), width=w, height=h)
+      make.fuzz.plot(plot.dat.l, plot.dat4, 1, 2, c("Hispanic", "Black", "No_College"), lim = 1)
+   dev.off()  
+   png(file = here("Plots", "label-proto13.png"), width=w, height=h)
+      make.fuzz.plot(plot.dat.l, plot.dat4, 1, 3, c("Upper_Class", "Male", "No_College", "Asian"), lim = 1)
+   dev.off() 
+   png(file = here("Plots", "label-proto14.png"), width=w, height=h)
+      make.fuzz.plot(plot.dat.l, plot.dat4, 1, 4, c("Lower_Class", "White", "College"), lim = 1)
    dev.off()
 ```
 
